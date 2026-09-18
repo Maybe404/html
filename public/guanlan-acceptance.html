@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- skill: html-document/v0.1 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>观澜 · 测试用例与验收报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #faf9f5;
+  --surface-soft: #f5f0e8;
+  --surface-card: #efe9de;
+  --hairline: #e6dfd8;
+  --hairline-soft: #ebe6df;
+  --ink: #141413;
+  --ink-body: #3d3d3a;
+  --ink-muted: #6c6a64;
+  --ink-subtle: #8e8b82;
+  --primary: #cc785c;
+  --primary-soft: rgba(204, 120, 92, 0.12);
+  --ok: #3f6b4c;
+  --ok-soft: rgba(63, 107, 76, 0.12);
+  --warn: #8a5a28;
+  --warn-soft: rgba(138, 90, 40, 0.12);
+  --font-sans: "Inter", "Noto Sans SC", -apple-system, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--canvas);
+  color: var(--ink-body);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+a { color: var(--primary); }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+.wrap {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 820px);
+  gap: 48px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 56px 28px 96px;
+}
+nav.toc {
+  position: sticky;
+  top: 32px;
+  align-self: start;
+  font-size: 13px;
+  line-height: 1.45;
+}
+nav.toc a {
+  display: block;
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding: 4px 0;
+}
+nav.toc a:hover { color: var(--ink); }
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-subtle);
+  margin-bottom: 12px;
+}
+h1 {
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.lede { font-size: 17px; color: var(--ink-muted); margin-bottom: 28px; }
+.meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  padding: 16px 0 28px;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 40px;
+}
+.meta span { color: var(--ink-subtle); font-family: var(--font-mono); font-size: 11px; }
+h2 {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 56px 0 16px;
+}
+h3 { font-size: 18px; font-weight: 500; color: var(--ink); margin: 28px 0 12px; }
+p { margin-bottom: 1em; }
+.verdict {
+  background: var(--surface-soft);
+  padding: 22px 24px;
+  border-left: 3px solid var(--primary);
+  margin: 0 0 28px;
+}
+.verdict strong { color: var(--ink); font-weight: 500; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 0 0 28px;
+}
+th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-subtle);
+  padding: 10px 8px 10px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+td {
+  padding: 10px 8px 10px 0;
+  border-bottom: 1px solid var(--hairline-soft);
+  vertical-align: top;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.tag-ok { background: var(--ok-soft); color: var(--ok); }
+.tag-part { background: var(--warn-soft); color: var(--warn); }
+.tag-no { background: var(--primary-soft); color: var(--primary); }
+ul { margin: 0 0 1.2em 1.2em; }
+li { margin-bottom: 0.35em; }
+.sign {
+  margin-top: 48px;
+  padding: 20px;
+  background: var(--surface-card);
+}
+.scroll { overflow-x: auto; }
+@media (max-width: 840px) {
+  .wrap { grid-template-columns: 1fr; padding: 36px 20px 72px; }
+  nav.toc { position: static; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+  .meta { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="章节">
+  <a href="#c1">1 结论</a>
+  <a href="#c2">2 范围</a>
+  <a href="#c3">3 环境</a>
+  <a href="#c4">4 主路径</a>
+  <a href="#c5">5 用例</a>
+  <a href="#c6">6 PRD 对照</a>
+  <a href="#c7">7 未完成</a>
+  <a href="#c8">8 现场签字</a>
+</nav>
+<main>
+  <p class="kicker">交付 · 2026-09-18 · v1</p>
+  <h1>观澜测试用例与验收报告</h1>
+  <p class="lede">给要验收的领导和要复测的同事。先看结论，再按表格点。术语第一次出现都用白话写了。</p>
+  <div class="meta">
+    <div><span>产品</span><br>观澜演示工作台</div>
+    <div><span>线上</span><br>guanlan.maybe404.com</div>
+    <div><span>构建</span><br>2d58acc3-0482-476e-9f33-7287f14dd239</div>
+    <div><span>角色</span><br>演示账号 · 张远（战略研究）</div>
+  </div>
+
+  <h2 id="c1">1. 验收结论</h2>
+  <div class="verdict">
+    <p><strong>演示环境可以按专题走完全流程，满足现场演示必过项的操作路径。不能当作生产系统或投资决策系统验收通过。</strong></p>
+    <p>打开就能给客户看：从资料到结论、从结论回原文、新消息不覆盖旧版本。数据是混合包；分析步骤是预生成演示流水线；没有真实登录、没有完整财务测算、也不会自动批准投资。</p>
+  </div>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>判断</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>演示是否可讲</td><td>可以。主路径、核验表单、版本确认、专题隔离、真实/模拟标识均可现场操作。</td></tr>
+      <tr><td>是否算产品终验</td><td>不算。本轮是桌面演示工作台。</td></tr>
+      <tr><td>必过项</td><td>A03、A08、A09、A12 功能可走通。A13 表单可走，正式交付仍须用现场真实材料再核。</td></tr>
+      <tr><td>发布</td><td>2026-09-18 已上线。Version ID 见页眉。</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="c2">2. 测什么、不测什么</h2>
+  <p>观澜是新能源<strong>场站配套储能</strong>的产业情报与决策研究工作台。用户带着一个专题进来：收资料、核验证据，比较苏浙粤，下钻场站，生成研究草稿，给领导预览，有新政策再出待确认版本。</p>
+  <p><strong>测：</strong>七页能否连着走且不串台；该自动带出的不要空等按钮；该手点的分析不要一进页就摊开；核验/审查/确认不被系统替人做完；真/模拟有标识；刷新后核验还在。</p>
+  <p><strong>不测、不宣称完成：</strong>登录权限、OCR/PDF 解析、全网实时抓取、真实率与综合打分、自动投资批准、完整财务引擎、生产采集巡检。</p>
+  <p>演示包：三省政策与电价为真实公开口径；场站内部访谈与部分运行数据为明确标注的模拟。「情景研判」不能说成已生效事实。</p>
+
+  <h2 id="c3">3. 环境与策略</h2>
+  <p>线上 https://guanlan.maybe404.com ；本地 http://127.0.0.1:5173/ 。预置专题 A 苏浙粤（有已确认版本），专题 B 如东（草稿、资料更少）。进度存在浏览器 localStorage（<code>guanlan-demo-v4</code>），深色模式 <code>guanlan-theme</code>。换电脑或清站点数据等于重来。</p>
+  <p>判定：通过 / 部分通过 / 未测 / 不通过。P0 必测。页面上没有进度条，以本报告和演讲稿为准。</p>
+
+  <h2 id="c4">4. 端到端主路径</h2>
+  <p>用苏浙粤专题。讲解约 12 分钟，复测约 25 分钟。</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>步</th><th>做</th><th>应看到</th><th>不该看到</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>打开地址，确认专题</td><td>问题、范围、缺口，无需先装载</td><td>顶部演示进度条</td></tr>
+      <tr><td>2</td><td>情报资料</td><td>表已在；仅一个导入按钮</td><td>重复导入；预置资料还要再解析才出现</td></tr>
+      <tr><td>3</td><td>打开原文并核验 ≥10 字</td><td>片段定位；刷新仍在</td><td>只跳转官网首页</td></tr>
+      <tr><td>4–5</td><td>比较：先看卡片/场站，再跑图</td><td>思考态后出七维与 N/V；无综合分</td><td>虚假百分比；面积当总分</td></tr>
+      <tr><td>6</td><td>如东场站</td><td>功率容量时长或空值</td><td>未知填 0；继承省第一</td></tr>
+      <tr><td>7</td><td>生成研究，点 M-010</td><td>三层结论；回到证据</td><td>未生成就摊开长报告</td></tr>
+      <tr><td>8</td><td>报告审查提交</td><td>封面随专题；结论在生成后带入</td><td>确认=投资批准</td></tr>
+      <tr><td>9</td><td>分析新政，再确认 v1.5</td><td>确认前 v1.4 仍正式；不重复造版</td><td>征求意见稿写成已生效</td></tr>
+      <tr><td>10</td><td>能力模拟编辑</td><td>旧值新值与条件</td><td>一进页就有影响清单</td></tr>
+      <tr><td>11</td><td>切如东专题</td><td>资料场站收缩</td><td>两专题串台</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="c5">5. 分模块用例（摘要）</h2>
+  <p>完整编号见仓库 <code>docs/观澜-测试用例与验收报告-v1.md</code>。此处列出结论。</p>
+  <h3>导航与专题</h3>
+  <p>七入口可进、专题只在左侧切换且不挡导航、新建弹窗居中可校验、空专题需载入或导入、产品名统一为观澜。结果：通过。</p>
+  <h3>资料与核验</h3>
+  <p>预置清单可见、导入按钮不重复、原文非首页、人工核验留痕可刷新。信源三种结果可区分。结果：通过（T02 去重为规则演示，未做大规模压测 → 专项部分通过）。</p>
+  <h3>比较与场站</h3>
+  <p>卡片/场站随专题带出；图表手点；无综合分；N≠V；场站不继承省排名；空值不填 0。结果：通过。</p>
+  <h3>研究与报告</h3>
+  <p>生成后才出长文；无资料/无研究有拦截；事实推断假设分列；审查不是投资批准。结果：通过。</p>
+  <h3>跟踪与能力</h3>
+  <p>历史自动带出；分析手点；确认前旧版有效；影响清单仅在编辑后出现。结果：通过。</p>
+  <h3>主题</h3>
+  <p>深色模式可切换并记住。结果：通过。</p>
+
+  <h2 id="c6">6. 对照 PRD A01—A15</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>编号</th><th>档位</th><th>结果</th><th>现场注意</th></tr></thead>
+    <tbody>
+      <tr><td>A01 专题</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>可用预置专题</td></tr>
+      <tr><td>A02 信源与属性</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td></td></tr>
+      <tr><td>A03 结论到原文</td><td>必过</td><td><span class="tag tag-ok">通过</span></td><td>必须手点编号</td></tr>
+      <tr><td>A04 冲突口径</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>M-009 / M-010</td></tr>
+      <tr><td>A05 七维与 N/V</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>先跑图</td></tr>
+      <tr><td>A06 能力影响</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>先模拟编辑</td></tr>
+      <tr><td>A07 四档与配置</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>先生成研究</td></tr>
+      <tr><td>A08 新信息</td><td>必过</td><td><span class="tag tag-ok">通过</span></td><td>口头说明预生成</td></tr>
+      <tr><td>A09 版本确认</td><td>必过</td><td><span class="tag tag-ok">通过</span></td><td>确认前旧版有效</td></tr>
+      <tr><td>A10 连续跳转隔离</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>切如东</td></tr>
+      <tr><td>A11 异常恢复</td><td>可预置</td><td><span class="tag tag-part">部分</span></td><td>无完整后端失败码</td></tr>
+      <tr><td>A12 真/模拟标识</td><td>必过</td><td><span class="tag tag-ok">通过</span></td><td>抽查 3 处以上</td></tr>
+      <tr><td>A13 人工核验</td><td>必过</td><td><span class="tag tag-part">部分</span></td><td>表单可走；终验须真实独立材料</td></tr>
+      <tr><td>A14 配储边界</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td></td></tr>
+      <tr><td>A15 场站参数</td><td>可预置</td><td><span class="tag tag-ok">通过</span></td><td>空值不填 0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>专项：T01/T05/T07/T09/T10 通过；T02/T04/T06 部分通过；T03 视阈值是否命中；T08 版本冲突拦截未测（无多人后端）。</p>
+
+  <h2 id="c7">7. 未完成与风险</h2>
+  <ul>
+    <li>演示流水线不是实时大模型，也不是全网监测。</li>
+    <li>A13 终验材料独立性未用两份新的真实公文再做。</li>
+    <li>无登录审计服务端；核验留痕在浏览器本地。</li>
+    <li>无 PDF/扫描件解析，禁止伪造识别结果。</li>
+    <li>无投资财务引擎。清浏览器会丢演示勾选。</li>
+  </ul>
+
+  <h2 id="c8">8. 现场 25 分钟与签字</h2>
+  <p>说明混合数据 → 核验电价原文 → 比较跑图与如东 → 生成研究并回原文 → 报告提交 → 分析新政并确认版本 → 切如东专题。</p>
+  <div class="sign">
+    <p>演示人 ________　日期 2026-09-18</p>
+    <p>验收人 ________　结论：通过 / 有条件通过 / 不通过</p>
+    <p>条件（若有）须补：A13 真实材料补核时间、对外口径（演示非生产）、未实现功能已口头确认。</p>
+  </div>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>观澜 · 新能源产业情报研究台（原型 Demo）</title>
+<style>
+  /* ============ 设计基调 ============
+     色彩：墨绿一个主色 + 中性灰阶，点缀一个琥珀（警示/待核验）
+     字体：标题用宋体系衬线（稳重、研究报告感），正文用苹方系无衬线
+     留白：大量呼吸空间，卡片信息密度克制 */
+  :root {
+    --ink: #1c2733;
+    --sub: #6b7a8a;
+    --faint: #9aa8b6;
+    --bg: #f4f6f5;
+    --card: #ffffff;
+    --line: #e5eae8;
+    --green: #0e6e54;
+    --green-deep: #0a4d3b;
+    --green-ghost: rgba(14,110,84,.07);
+    --amber: #a8701a;
+    --amber-ghost: rgba(168,112,26,.09);
+    --red: #b3402e;
+    --serif: "Songti SC", "Noto Serif SC", "STSong", serif;
+    --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono: "SF Mono", "JetBrains Mono", monospace;
+    --sidebar-w: 220px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.75;
+    overflow: hidden;
+  }
+
+  /* ============ 布局骨架 ============ */
+  .app { display: flex; height: 100vh; }
+
+  /* ---- 侧边栏 ---- */
+  aside {
+    width: var(--sidebar-w);
+    background: var(--green-deep);
+    color: rgba(255,255,255,.85);
+    display: flex;
+    flex-direction: column;
+    flex: none;
+  }
+  .brand {
+    padding: 26px 22px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .brand .logo {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 4px;
+  }
+  .brand .logo span { color: #58c9a4; }
+  .brand .sub { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,.5); margin-top: 2px; }
+  nav { padding: 18px 12px; flex: 1; overflow-y: auto; }
+  .nav-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.38);
+    letter-spacing: 2px;
+    padding: 14px 12px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: rgba(255,255,255,.75);
+    font-size: 13.5px;
+    margin-bottom: 2px;
+    transition: background .18s, color .18s;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.08); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,.14); color: #fff; font-weight: 600; }
+  .nav-item .ic { width: 18px; text-align: center; opacity: .85; }
+  .nav-item .badge {
+    margin-left: auto;
+    background: #58c9a4;
+    color: var(--green-deep);
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+  .side-foot {
+    padding: 16px 20px;
+    font-size: 11px;
+    color: rgba(255,255,255,.4);
+    border-top: 1px solid rgba(255,255,255,.1);
+    line-height: 1.6;
+  }
+
+  /* ---- 主区 ---- */
+  main { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+  .page { display: none; padding: 36px 44px 80px; max-width: 1180px; }
+  .page.show { display: block; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .page-head { margin-bottom: 28px; }
+  .page-head h1 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .page-head .desc { color: var(--sub); font-size: 13.5px; margin-top: 4px; }
+
+  /* ---- 通用组件 ---- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 .hint { font-weight: 400; font-size: 12px; color: var(--faint); margin-left: auto; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 1080px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  .tag {
+    display: inline-block;
+    font-size: 11.5px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .tag.g { background: var(--green-ghost); color: var(--green); }
+  .tag.a { background: var(--amber-ghost); color: var(--amber); }
+  .tag.r { background: rgba(179,64,46,.08); color: var(--red); }
+  .tag.n { background: #eef1f4; color: var(--sub); }
+
+  .sim-note {
+    font-size: 11.5px;
+    color: var(--faint);
+    background: var(--green-ghost);
+    border-radius: 8px;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  button.act {
+    font-family: var(--sans);
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    padding: 9px 20px;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: background .18s, transform .1s;
+    font-weight: 600;
+  }
+  button.act:hover { background: #0b5a45; }
+  button.act:active { transform: scale(.97); }
+  button.ghost {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--sub);
+    border-radius: 9px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color .18s, color .18s;
+  }
+  button.ghost:hover { border-color: var(--green); color: var(--green); }
+
+  /* ============ P1 情报总览 ============ */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 1080px) { .kpi-row { grid-template-columns: repeat(2,1fr); } }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; cursor: pointer; transition: border-color .18s, box-shadow .18s; }
+  .kpi:hover { border-color: var(--green); box-shadow: 0 6px 22px rgba(14,110,84,.08); }
+  .kpi .k-label { font-size: 12px; color: var(--sub); }
+  .kpi .k-val { font-family: var(--serif); font-size: 30px; font-weight: 700; margin: 2px 0; }
+  .kpi .k-foot { font-size: 11.5px; color: var(--faint); }
+  .kpi .k-foot b { font-weight: 700; }
+  .up { color: var(--green); } .down { color: var(--red); } .fl { color: var(--amber); }
+
+  .feed { display: flex; flex-direction: column; }
+  .feed-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background .15s;
+  }
+  .feed-item:hover { background: var(--green-ghost); }
+  .feed-item .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 9px;
+    flex: none;
+  }
+  .feed-item .fi-main { flex: 1; min-width: 0; }
+  .feed-item .fi-title { font-size: 13.5px; font-weight: 600; }
+  .feed-item .fi-meta { font-size: 12px; color: var(--faint); margin-top: 2px; }
+  .feed-item .fi-conf { flex: none; text-align: right; }
+
+  .bar-wrap { margin: 10px 0 18px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin: 9px 0; }
+  .bar-row .b-label { width: 130px; font-size: 12.5px; color: var(--sub); flex: none; text-align: right; }
+  .bar-row .b-track { flex: 1; height: 10px; background: #eef1f0; border-radius: 5px; overflow: hidden; }
+  .bar-row .b-fill { height: 100%; background: var(--green); border-radius: 5px; width: 0; transition: width 1s cubic-bezier(.22,1,.36,1); }
+  .bar-row .b-val { width: 52px; font-size: 12px; font-weight: 700; flex: none; }
+
+  /* 侧滑详情 */
+  .drawer-mask {
+    position: fixed; inset: 0;
+    background: rgba(20,30,28,.35);
+    display: none;
+    z-index: 40;
+  }
+  .drawer-mask.show { display: block; animation: fade .2s; }
+  .drawer {
+    position: fixed; top: 0; right: -460px; bottom: 0;
+    width: 440px;
+    background: #fff;
+    box-shadow: -12px 0 44px rgba(0,0,0,.12);
+    z-index: 50;
+    transition: right .3s cubic-bezier(.22,1,.36,1);
+    overflow-y: auto;
+    padding: 30px 30px 50px;
+  }
+  .drawer.show { right: 0; }
+  .drawer .d-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none; font-size: 20px;
+    color: var(--faint); cursor: pointer;
+  }
+  .drawer h2 { font-family: var(--serif); font-size: 19px; line-height: 1.5; margin-bottom: 10px; padding-right: 30px; }
+  .drawer .d-sec { margin-top: 20px; }
+  .drawer .d-sec h4 { font-size: 13px; color: var(--green); margin-bottom: 8px; letter-spacing: 1px; }
+  .drawer .d-sec p, .drawer .d-sec li { font-size: 13px; color: #3c4a58; }
+  .drawer ul { padding-left: 18px; }
+  .src-line {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px;
+    background: #f7faf9;
+    border-radius: 9px;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+  }
+  .src-line .s-ic { flex: none; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; margin-top: 2px; }
+  .verify-chain { display: flex; gap: 0; margin-top: 8px; }
+  .v-node {
+    flex: 1; text-align: center; font-size: 11.5px;
+    padding: 10px 4px; border-top: 3px solid var(--line);
+    color: var(--faint);
+  }
+  .v-node.on { border-color: var(--green); color: var(--green); font-weight: 700; }
+  .v-node.half { border-color: var(--amber); color: var(--amber); font-weight: 700; }
+
+  /* ============ P2 项目核验 ============ */
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tbl th {
+    text-align: left; font-size: 12px; color: var(--sub);
+    font-weight: 600; padding: 8px 10px; border-bottom: 1.5px solid var(--line);
+  }
+  .tbl td { padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .tbl tr { cursor: pointer; transition: background .15s; }
+  .tbl tr:hover { background: var(--green-ghost); }
+  .tbl .pname { font-weight: 600; }
+  .tbl .psub { font-size: 11.5px; color: var(--faint); }
+  .chips { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chip {
+    padding: 6px 16px; border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 12.5px; cursor: pointer;
+    background: #fff; color: var(--sub);
+    transition: all .18s; user-select: none;
+  }
+  .chip:hover { border-color: var(--green); color: var(--green); }
+  .chip.on { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+
+  /* ============ P3 区域对比 ============ */
+  .region-pick { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .rp {
+    border: 1.5px solid var(--line);
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 22px;
+    cursor: pointer; user-select: none;
+    transition: all .18s;
+    text-align: center;
+  }
+  .rp .rp-name { font-weight: 700; font-size: 14.5px; }
+  .rp .rp-score { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--green); }
+  .rp.on { border-color: var(--green); background: var(--green-ghost); box-shadow: 0 4px 16px rgba(14,110,84,.1); }
+  .rp.sel2 { border-color: var(--amber); background: var(--amber-ghost); }
+  .rp.sel2 .rp-score { color: var(--amber); }
+  .radar-box { display: flex; justify-content: center; padding: 10px 0; }
+  .dim-row { display: flex; align-items: center; gap: 14px; margin: 13px 0; }
+  .dim-row .d-name { width: 120px; font-size: 13px; flex: none; text-align: right; }
+  .dim-row .d-track { position: relative; flex: 1; height: 26px; }
+  .dim-row .d-bar {
+    position: absolute; top: 4px; height: 18px; border-radius: 4px;
+    transition: width .8s cubic-bezier(.22,1,.36,1);
+  }
+  .dim-row .d-bar.a { left: 0; background: var(--green); }
+  .dim-row .d-bar.b { right: 0; background: var(--amber); }
+  .dim-row .d-val { width: 96px; font-size: 12px; color: var(--sub); flex: none; }
+  .verdict {
+    background: var(--green-ghost);
+    border-left: 4px solid var(--green);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 13.5px;
+    margin-top: 18px;
+  }
+  .verdict b { color: var(--green-deep); }
+
+  /* ============ P4 布局决策 ============ */
+  .decision-flow { display: flex; align-items: stretch; gap: 0; margin: 20px 0; }
+  .df-node {
+    flex: 1; background: #fff; border: 1.5px solid var(--line);
+    border-radius: 12px; padding: 16px 18px; position: relative;
+    cursor: pointer; transition: all .2s;
+  }
+  .df-node:hover { border-color: var(--green); }
+  .df-node.active { border-color: var(--green); background: var(--green-ghost); }
+  .df-node .df-step { font-size: 11px; color: var(--faint); letter-spacing: 2px; }
+  .df-node .df-title { font-weight: 700; font-size: 14px; margin: 3px 0 4px; }
+  .df-node .df-desc { font-size: 12px; color: var(--sub); }
+  .df-arrow { align-self: center; color: var(--faint); padding: 0 10px; font-size: 18px; }
+  .cap-check { margin-top: 6px; }
+  .cap-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .cap-row:last-child { border: none; }
+  .cap-row .c-name { width: 150px; font-weight: 600; flex: none; }
+  .cap-row .c-bar { flex: 1; height: 8px; background: #eef1f0; border-radius: 4px; position: relative; }
+  .cap-row .c-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+  .cap-row .c-gap { flex: none; width: 150px; font-size: 12px; }
+
+  /* ============ P5 变化更新 ============ */
+  .event-btn-zone {
+    background: linear-gradient(135deg, #0a4d3b, #0e6e54);
+    border-radius: 14px; color: #fff;
+    padding: 26px 30px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .event-btn-zone h3 { font-family: var(--serif); font-size: 19px; }
+  .event-btn-zone p { font-size: 13px; opacity: .85; }
+  .event-btn-zone button { margin-left: auto; background: #fff; color: var(--green-deep); font-weight: 700; }
+  .event-btn-zone button:hover { background: #d9efe7; }
+  .update-log { display: none; }
+  .update-log.show { display: block; animation: fade .5s; }
+  .update-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .update-item .u-time { flex: none; width: 120px; font-size: 12px; color: var(--faint); font-family: var(--mono); padding-top: 2px; }
+  .update-item .u-body h4 { font-size: 13.5px; font-weight: 700; }
+  .update-item .u-body p { font-size: 12.5px; color: var(--sub); margin-top: 3px; }
+  .impact-pill {
+    display: inline-block; font-size: 11.5px; font-weight: 700;
+    padding: 2px 10px; border-radius: 999px; margin-left: 8px;
+  }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink); color: #fff;
+    padding: 11px 26px; border-radius: 999px;
+    font-size: 13px; z-index: 99;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast b { color: #58c9a4; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ================= 侧边栏 ================= -->
+  <aside>
+    <div class="brand">
+      <div class="logo">观<span>澜</span></div>
+      <div class="sub">新能源产业情报研究台</div>
+    </div>
+    <nav>
+      <div class="nav-label">情 报</div>
+      <div class="nav-item active" data-page="p1"><span class="ic">◧</span>情报总览<span class="badge" id="nav-badge">3</span></div>
+      <div class="nav-item" data-page="p2"><span class="ic">◎</span>项目核验台</div>
+      <div class="nav-label">研 究</div>
+      <div class="nav-item" data-page="p3"><span class="ic">⇄</span>区域机会对比</div>
+      <div class="nav-item" data-page="p4"><span class="ic">✓</span>布局决策案</div>
+      <div class="nav-label">响 应</div>
+      <div class="nav-item" data-page="p5"><span class="ic">⚡</span>变化与更新<span class="badge" id="upd-badge" style="display:none">!</span></div>
+    </nav>
+    <div class="side-foot">
+      内部资料库已接入<br>
+      <span style="opacity:.7">演示数据 · 部分为模拟</span>
+    </div>
+  </aside>
+
+  <!-- ================= 主区 ================= -->
+  <main>
+
+  <!-- ========== P1 情报总览 ========== -->
+  <section class="page show" id="p1">
+    <div class="page-head">
+      <h1>情报总览</h1>
+      <div class="desc">外部情报与内部资料的统一入口 · 今日自动归集 47 条，3 条高优先级待研</div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi" onclick="go('p2')">
+        <div class="k-label">在跟踪项目</div>
+        <div class="k-val">126</div>
+        <div class="k-foot"><b class="fl">18</b> 条进展存疑待核验</div>
+      </div>
+      <div class="kpi" onclick="go('p3')">
+        <div class="k-label">重点区域</div>
+        <div class="k-val">5</div>
+        <div class="k-foot"><b class="up">江苏</b> 机会分本周上调</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">本月新政策</div>
+        <div class="k-val">9</div>
+        <div class="k-foot"><b class="fl">2</b> 条对布局判断有影响</div>
+      </div>
+      <div class="kpi" onclick="go('p5')">
+        <div class="k-label">研究结论更新</div>
+        <div class="k-val">4</div>
+        <div class="k-foot">近 30 天 · 均有留痕依据</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card" style="grid-row: span 2">
+        <h3>今日情报流 <span class="hint">点击任意条目查看信源核验</span></h3>
+        <div class="feed" id="feed"></div>
+      </div>
+      <div class="card">
+        <h3>热度真伪扫描 <span class="hint">政策热度 ≠ 真实需求</span></h3>
+        <div class="bar-wrap" id="hype-bars"></div>
+        <p style="font-size:12.5px;color:var(--sub)">绿条 = 经核验的真实需求信号；灰底 = 媒体热度。两根差距越大，越需要警惕"虚热"。</p>
+      </div>
+      <div class="card">
+        <h3>内外信源结构</h3>
+        <div class="bar-wrap">
+          <div class="bar-row"><div class="b-label">政策/招投标（外部）</div><div class="b-track"><div class="b-fill" data-w="46"></div></div><div class="b-val">46%</div></div>
+          <div class="bar-row"><div class="b-label">项目公告（外部）</div><div class="b-track"><div class="b-fill" data-w="22"></div></div><div class="b-val">22%</div></div>
+          <div class="bar-row"><div class="b-label">访谈/调研（内部）</div><div class="b-track"><div class="b-fill" data-w="21"></div></div><div class="b-val">21%</div></div>
+          <div class="bar-row"><div class="b-label">内部项目资料</div><div class="b-track"><div class="b-fill" data-w="11"></div></div><div class="b-val">11%</div></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--sub)">每条研究结论平均引用 <b>3.2</b> 个信源，内外信源交叉印证后方可进入决策案。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== P2 项目核验台 ========== -->
+  <section class="page" id="p2">
+    <div class="page-head">
+      <h1>项目核验台</h1>
+      <div class="desc">签约 ≠ 投产。每个项目沿四段核验链推进，全部走通才算"真实落地"。</div>
+    </div>
+
+    <div class="chips" id="p2-chips">
+      <div class="chip on" data-f="all">全部 126</div>
+      <div class="chip" data-f="risk">进展存疑 18</div>
+      <div class="chip" data-f="ok">已核验 89</div>
+      <div class="chip" data-f="new">新入库 19</div>
+    </div>
+
+    <div class="card" style="padding:10px 24px">
+      <table class="tbl">
+        <thead><tr>
+          <th style="width:32%">项目</th><th>区域</th><th>规模</th><th>核验进度</th><th>最新信源动作</th><th>判定</th>
+        </tr></thead>
+        <tbody id="p2-body"></tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:16px"><span class="sim-note">◈ 演示说明：项目清单为模拟数据，核验链规则与信源结构为方案设计内容</span></p>
+  </section>
+
+  <!-- ========== P3 区域机会对比 ========== -->
+  <section class="page" id="p3">
+    <div class="page-head">
+      <h1>区域机会对比</h1>
+      <div class="desc">点击选中两个区域横向对比 · 机会分由需求、竞争、落地、政策四维加权得出</div>
+    </div>
+
+    <div class="region-pick" id="rp"></div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>五维对比 <span class="hint">绿 = A 区　琥珀 = B 区</span></h3>
+        <div id="dims"></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:18px">
+          <h3>进入条件清单</h3>
+          <div id="entry-list"></div>
+        </div>
+        <div class="verdict" id="verdict-box"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== P4 布局决策案 ========== -->
+  <section class="page" id="p4">
+    <div class="page-head">
+      <h1>布局决策案</h1>
+      <div class="desc">外部机会 × 内部能力 的对齐视图 —— 回答"机会虽好，我们干得了吗"</div>
+    </div>
+
+    <div class="decision-flow" id="df">
+      <div class="df-node active"><div class="df-step">STEP 1</div><div class="df-title">机会识别</div><div class="df-desc">区域机会对比产出候选</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-node"><div class="df-step">STEP 2</div><div class="df-title">能力对齐</div><div class="df-desc">内部能力逐项过检</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-node"><div class="df-step">STEP 3</div><div class="df-title">风险界定</div><div class="df-desc">成立条件与退出线</div></div>
+      <div class="df-arrow">→</div>
+      <div class="df-node"><div class="df-step">STEP 4</div><div class="df-title">立项论证</div><div class="df-desc">输出决策案与跟踪项</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>内部能力对齐检查 <span class="hint">机会：江苏 · 工商业储能</span></h3>
+        <div class="cap-check" id="cap"></div>
+      </div>
+      <div class="card">
+        <h3>决策结论（当前版本 v1.4）</h3>
+        <p style="font-size:13.5px">建议<b>优先布局江苏工商业储能</b>：需求经双信源核验为真、竞争尚未固化、公司渠道能力基本匹配，缺口仅在运维团队本地化。</p>
+        <div style="margin-top:14px" id="cond-list"></div>
+      </div>
+    </div>
+    <p style="margin-top:16px"><span class="sim-note">◈ 每条结论右侧附信源数与更新时间，评审可逐条溯源（演示中点击 STEP 节点可切换说明）</span></p>
+  </section>
+
+  <!-- ========== P5 变化与更新 ========== -->
+  <section class="page" id="p5">
+    <div class="page-head">
+      <h1>变化与更新</h1>
+      <div class="desc">重要变化出现后，系统自动触发研究复核 → 结论版本化更新，全程留痕</div>
+    </div>
+
+    <div class="event-btn-zone">
+      <div>
+        <h3>现场演示：模拟一条重要变化</h3>
+        <p>点击按钮，模拟"江苏发布新版分时电价政策"这一外部事件，观察研究链路如何响应。</p>
+      </div>
+      <button class="act" onclick="fireEvent()">⚡ 触发模拟事件</button>
+    </div>
+
+    <div class="card update-log" id="ulog">
+      <h3>本次事件触发的更新链路</h3>
+      <div id="ulog-body"></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>历史更新留痕</h3>
+      <div class="update-item">
+        <div class="u-time">09-12 14:20</div>
+        <div class="u-body">
+          <h4>山东某 200MWh 项目核验降级<span class="impact-pill" style="background:var(--amber-ghost);color:var(--amber)">影响 2 项结论</span></h4>
+          <p>招标公示期三次延期、业主方融资未落地 → 项目状态由"推进中"降为"存疑"，山东区域机会分 -0.3，决策案自动提示复核。</p>
+        </div>
+      </div>
+      <div class="update-item">
+        <div class="u-time">09-05 09:03</div>
+        <div class="u-body">
+          <h4>竞争对手 X 宣布华东降价 8%<span class="impact-pill" style="background:rgba(179,64,46,.08);color:var(--red)">影响竞争维度</span></h4>
+          <p>江苏、浙江竞争分下调，进入条件中"价格空间"由充足收窄为一般，已在决策案 v1.3 中留痕。</p>
+        </div>
+      </div>
+      <div class="update-item" style="border:none">
+        <div class="u-time">08-28 16:45</div>
+        <div class="u-body">
+          <h4>客户访谈新增 3 份（内部资料）</h4>
+          <p>华东某园区业主确认年内储能采购预算，与招投标信号交叉印证，江苏需求真实度上调。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<!-- 详情抽屉 -->
+<div class="drawer-mask" id="dmask" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <button class="d-close" onclick="closeDrawer()">✕</button>
+  <div id="drawer-body"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= 导航 ================= */
+function go(id) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === id));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('show', p.id === id));
+  document.querySelector('main').scrollTop = 0;
+  animateBars(id);
+}
+document.querySelectorAll('.nav-item').forEach(n => n.onclick = () => go(n.dataset.page));
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ================= 数据（演示用，部分模拟） ================= */
+const FEED = [
+  {t:'江苏：新版分时电价政策公开征求意见', m:'政策 · 江苏省发改委 · 2 小时前', c:1, hot:true, d:'峰谷价差预计扩大至 0.7 元/kWh 以上，直接改善工商业储能套利模型。已在「变化与更新」生成复核任务。'},
+  {t:'山东 200MWh 独立储能项目第三次延期公示', m:'项目公告 · 山东省公共资源交易中心 · 5 小时前', c:2, d:'该项目为山东机会判断的支撑证据之一，连续延期触发自动降级复核，核验状态由"推进中"降为"存疑"。'},
+  {t:'某园区业主访谈纪要归档：确认年内储能采购预算', m:'内部资料 · 客户访谈 · 昨天', c:3, d:'内部信号与江苏招投标数据交叉印证，江苏"需求真实度"评分上调。信源等级：内部一手。'},
+  {t:'华东储能系统集成招标 32 起，环比 +18%', m:'招投标 · 自建归集 · 昨天', c:2, d:'外部热度信号。经与落地率历史数据比对，华东招投标→并网转化率约 41%，热度判定为"中高真实"。'},
+  {t:'竞争对手 X 宣布工商业储能整机降价 8%', m:'行业资讯 · 多家媒体转载 · 2 天前', c:2, d:'两家媒体 + 一份渠道交流纪要印证，竞争维度评分已更新，江苏进入条件中价格空间收窄。'},
+  {t:'西北某示范项目并网投运（实拍影像归档）', m:'项目公告 + 内部实地调研 · 3 天前', c:3, d:'公告与实地调研双信源核验通过，是少数"热度=真实"的西北样本，已录入案例库。'},
+];
+const CONF = {1:['tag a','待交叉'],2:['tag a','双源印证'],3:['tag g','三源印证']};
+
+function renderFeed() {
+  document.getElementById('feed').innerHTML = FEED.map((f,i) => `
+    <div class="feed-item" onclick="openFeed(${i})">
+      <div class="dot" style="background:${f.hot?'var(--red)':'var(--green)'}"></div>
+      <div class="fi-main">
+        <div class="fi-title">${f.t}${f.hot?' <span class="tag r">高优先级</span>':''}</div>
+        <div class="fi-meta">${f.m}</div>
+      </div>
+      <div class="fi-conf"><span class="${CONF[f.c][0]}">${CONF[f.c][1]}</span></div>
+    </div>`).join('');
+}
+function openFeed(i) {
+  const f = FEED[i];
+  document.getElementById('drawer-body').innerHTML = `
+    <h2>${f.t}</h2>
+    <span class="tag n">${f.m.split('·')[0].trim()}</span>
+    <div class="d-sec"><h4>信源核验</h4>
+      <div class="src-line"><span class="s-ic tag n">来源1</span><div>${f.m}</div></div>
+      <div class="src-line"><span class="s-ic tag ${f.c>=2?'g':'a'}">交叉</span><div>${f.c>=2?'已有第二个独立信源印证，置信度中高。':'尚无独立信源交叉印证，列入待研清单。'}</div></div>
+      ${f.c>=3?'<div class="src-line"><span class="s-ic tag g">三源</span><div>内外信源相互印证，可进入决策案引用。</div></div>':''}
+    </div>
+    <div class="d-sec"><h4>研究备注</h4><p>${f.d}</p></div>
+    <div class="d-sec"><h4>动作</h4>
+      <button class="act" style="margin-right:10px" onclick="closeDrawer();go('p5')">查看触发的更新</button>
+      <button class="ghost" onclick="toast('已加入研究队列（演示）')">加入深度研究</button>
+    </div>`;
+  document.getElementById('dmask').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+}
+function closeDrawer() {
+  document.getElementById('dmask').classList.remove('show');
+  document.getElementById('drawer').classList.remove('show');
+}
+
+/* 热度真伪条形图 */
+const HYPE = [
+  ['工商业储能（华东）', 62, 46], ['独立储能电站（山东）', 88, 21],
+  ['风光配储（西北）', 54, 17], ['虚拟电厂（全国）', 71, 9],
+];
+function renderHype() {
+  document.getElementById('hype-bars').innerHTML = HYPE.map(h => `
+    <div class="bar-row"><div class="b-label">${h[0]}</div>
+      <div class="b-track"><div class="b-fill" data-w="${h[2]}" style="opacity:.55"></div></div>
+      <div class="b-val">${h[2]}</div></div>
+    <div class="bar-row" style="margin-top:-6px"><div class="b-label" style="font-size:11px;color:var(--faint)">└ 媒体热度</div>
+      <div class="b-track"><div class="b-fill" data-w="${h[1]}" style="background:#c8d2cf"></div></div>
+      <div class="b-val" style="color:var(--faint)">${h[1]}</div></div>`).join('');
+}
+
+/* ================= P2 项目核验 ================= */
+const PROJ = [
+  {n:'盐城工业园区储能二期', s:'江苏 · 工商业', scale:'45MWh', v:[1,1,1,1], last:'并网公示 09-15', j:'ok', jt:'已核验'},
+  {n:'济南独立储能电站', s:'山东 · 独立储能', scale:'200MWh', v:[1,1,0,0], last:'公示第三次延期', j:'risk', jt:'存疑'},
+  {n:'苏州某制造企业用户侧储能', s:'江苏 · 工商业', scale:'12MWh', v:[1,1,1,0], last:'业主融资确认中', j:'new', jt:'推进中'},
+  {n:'张家口风光配储 bundled', s:'河北 · 风光配储', scale:'120MWh', v:[1,1,1,1], last:'实地调研影像归档', j:'ok', jt:'已核验'},
+  {n:'合肥产业园储能集采', s:'安徽 · 工商业', scale:'30MWh', v:[1,0,0,0], last:'仅见签约新闻', j:'risk', jt:'存疑'},
+  {n:'常州虚拟电厂聚合项目', s:'江苏 · VPP', scale:'8MWh', v:[1,1,1,0], last:'试点方案公示', j:'new', jt:'推进中'},
+];
+const VNAMES = ['签约属实','审批/备案','建设核验','并网投产'];
+function renderP2(filter) {
+  const list = PROJ.filter(p => filter==='all' || p.j===filter);
+  document.getElementById('p2-body').innerHTML = list.map(p => `
+    <tr onclick="openProj(${PROJ.indexOf(p)})">
+      <td><div class="pname">${p.n}</div><div class="psub">入库 30 天 · ${p.v.filter(x=>x).length}/4 核验段</div></td>
+      <td>${p.s}</td><td>${p.scale}</td>
+      <td><div class="verify-chain" style="margin:0">${p.v.map((v,i)=>`<div class="v-node ${v?'on':''}">${VNAMES[i]}</div>`).join('')}</div></td>
+      <td style="font-size:12.5px;color:var(--sub)">${p.last}</td>
+      <td><span class="tag ${p.j==='ok'?'g':p.j==='risk'?'r':'a'}">${p.jt}</span></td>
+    </tr>`).join('');
+}
+function openProj(i) {
+  const p = PROJ[i];
+  document.getElementById('drawer-body').innerHTML = `
+    <h2>${p.n}</h2>
+    <span class="tag n">${p.s}</span> <span class="tag n">${p.scale}</span>
+    <div class="d-sec"><h4>四段核验链</h4>
+      <div class="verify-chain">${p.v.map((v,k)=>`<div class="v-node ${v?'on':(k===p.v.lastIndexOf(1)+1?'half':'')}">${VNAMES[k]}</div>`).join('')}</div>
+      <p style="margin-top:10px;font-size:12.5px">${p.v.filter(x=>x).length===4?'四段全部走通，判定为真实落地，可作决策证据。':'核验未走通——签约 ≠ 投产，暂不能作为区域需求证据，状态：'+p.jt+'。'}</p>
+    </div>
+    <div class="d-sec"><h4>信源动作留痕</h4>
+      <div class="src-line"><span class="s-ic tag n">最近</span><div>${p.last}（自动归集 + 人工复核双通道）</div></div>
+      <div class="src-line"><span class="s-ic tag ${p.j==='ok'?'g':'a'}">判定</span><div>由信源核验规则自动判定，人工可申诉复核。</div></div>
+    </div>`;
+  document.getElementById('dmask').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+}
+document.querySelectorAll('#p2-chips .chip').forEach(c => c.onclick = () => {
+  document.querySelectorAll('#p2-chips .chip').forEach(x => x.classList.remove('on'));
+  c.classList.add('on'); renderP2(c.dataset.f);
+});
+
+/* ================= P3 区域对比 ================= */
+const REGIONS = {
+  js: {name:'江苏', score:8.2, dims:[82,64,78,88,71], entry:['渠道：需本地集成商合作（已谈 2 家）','价格：整机降 8% 后空间收窄','资质：需备案 + 电网接入批复','运维：需本地化运维团队（缺口）'], vd:'<b>推荐优先布局。</b>需求经招投标 × 业主访谈双通道核验为真；竞争加剧但尚未固化；最大缺口是运维本地化，属可补齐项。'},
+  sd: {name:'山东', score:6.5, dims:[74,52,58,66,60], entry:['政策：容量补偿政策存变数','价格：独立储能收益模型承压','资质：示范项目申报门槛高','渠道：电网侧关系需重建'], vd:'<b>观察仓。</b>政策热度高但项目落地率仅 24%（18 条存疑项目多数在此），建议政策明朗前不重仓。'},
+  zj: {name:'浙江', score:7.4, dims:[76,68,70,74,66], entry:['政策：峰谷价差全国最优','价格：竞争烈度中等','资质：备案流程 45 天','运维：杭州可设点'], vd:'<b>第二优先。</b>价差政策最优，需求真实度高，但公司渠道积累弱于江苏，建议随江苏项目组网跟进。'},
+  nx: {name:'宁夏', score:5.1, dims:[48,44,52,70,38], entry:['政策：强配储执行趋严','价格：收益依赖租赁费','资质：需参与省级竞配','运维：远程运维降本'], vd:'<b>暂缓。</b>风光配储需求依赖强配政策，真实付费意愿弱，仅跟踪不布局。'},
+  gd: {name:'广东', score:6.9, dims:[70,72,58,64,72], entry:['政策：现货市场衔接中','价格：价差波动大','资质：接入批复慢','渠道：本地竞争者密集'], vd:'<b>跟踪仓。</b>电力现货改革带来想象空间，但规则未定型，季度复核即可。'},
+};
+const DIMNAMES = ['需求真实度','落地转化率','政策稳定度','渠道匹配度','盈利空间'];
+let selA = 'js', selB = 'zj';
+function renderRp() {
+  document.getElementById('rp').innerHTML = Object.entries(REGIONS).map(([k,r]) => `
+    <div class="rp ${k===selA?'on':k===selB?'sel2':''}" onclick="pick('${k}')">
+      <div class="rp-name">${r.name}</div><div class="rp-score">${r.score}</div>
+    </div>`).join('');
+  renderDims();
+}
+function pick(k) {
+  if (k === selA) return;
+  if (k === selB) { [selA, selB] = [selB, selA]; }   // 点的是对比区 → 互换主次
+  else { selB = selA; selA = k; }                     // 点的是新区 → 新区为主，旧主选退为对比
+  renderRp();
+}
+function renderDims() {
+  const A = REGIONS[selA], B = REGIONS[selB];
+  document.getElementById('dims').innerHTML = DIMNAMES.map((n,i) => `
+    <div class="dim-row">
+      <div class="d-name">${n}</div>
+      <div class="d-track">
+        <div class="d-bar a" data-w="${A.dims[i]}"></div>
+        <div class="d-bar b" data-w="${B.dims[i]}"></div>
+      </div>
+      <div class="d-val">${A.dims[i]} vs ${B.dims[i]}</div>
+    </div>`).join('');
+  document.getElementById('entry-list').innerHTML = A.entry.map(e => `
+    <div class="cap-row"><div class="c-name" style="width:auto;flex:1">${e}</div></div>`).join('');
+  document.getElementById('verdict-box').innerHTML = `
+    <b>研究判断 · ${A.name} vs ${B.name}</b><br>${A.vd}
+    <div style="margin-top:10px"><button class="act" onclick="go('p4')">带入布局决策案 →</button></div>`;
+  animateBars('p3');
+}
+
+/* ================= P4 布局决策 ================= */
+const CAPS = [
+  ['渠道能力', 78, '已谈定 2 家本地集成商，基本匹配'],
+  ['产品适配', 85, '工商业机型齐全，无需新开'],
+  ['资金实力', 62, '单项目垫资上限 3000 万，需分期'],
+  ['运维网络', 35, '无本地运维团队 → 成立条件'],
+  ['政企关系', 58, '省能源局有接触，市级空白'],
+];
+function renderCap() {
+  document.getElementById('cap').innerHTML = CAPS.map(c => {
+    const ok = c[1] >= 60, mid = c[1] >= 45;
+    return `<div class="cap-row">
+      <div class="c-name">${c[0]}</div>
+      <div class="c-bar"><div class="c-fill" style="width:${c[1]}%;background:${ok?'var(--green)':mid?'var(--amber)':'var(--red)'}"></div></div>
+      <div class="c-gap" style="color:${ok?'var(--green)':mid?'var(--amber)':'var(--red)'}">${ok?'✓ ':mid?'△ ':'✕ '}${c[2]}</div>
+    </div>`}).join('');
+  document.getElementById('cond-list').innerHTML = `
+    <div class="cap-row"><div class="c-name" style="width:auto;flex:1">① 运维本地化：3 个月内组建苏州运维点（否则降级为渠道合作模式）</div></div>
+    <div class="cap-row"><div class="c-name" style="width:auto;flex:1">② 价格线：对手再降价超 5% 时重算收益模型</div></div>
+    <div class="cap-row"><div class="c-name" style="width:auto;flex:1">③ 政策线：江苏分时电价终稿落定后 5 个工作日内完成复核</div></div>`;
+}
+document.querySelectorAll('#df .df-node').forEach((n,i) => n.onclick = () => {
+  document.querySelectorAll('#df .df-node').forEach(x => x.classList.remove('active'));
+  n.classList.add('active');
+  toast(['机会识别：来自区域对比，每个机会分可溯源到信源', '能力对齐：内部资料逐项打分，缺口显式化为成立条件', '风险界定：每条结论配成立条件与退出线', '立项论证：版本化决策案，变化自动触发复核'][i]);
+});
+
+/* ================= P5 变化更新 ================= */
+function fireEvent() {
+  const log = [
+    [0.0, 'sys', '事件接入：江苏发改委发布新版分时电价政策（征求意见稿）', '外部信源自动归集 · 自动打标：影响盈利空间维度'],
+    [1.2, 'ai', '研究复核任务生成 #R-0918-03', '关联决策案 v1.4 中的"江苏工商业储能"结论，触发条件：政策线 ③'],
+    [2.4, 'ai', '收益模型重算：峰谷价差 0.61 → 0.72 元/kWh', '工商业储能 IRR 由 8.4% 上修至 10.9%，引用模型：内部测算台账'],
+    [3.6, 'ai', '江苏机会分 8.2 → 8.6，五维中"盈利空间" 71 → 79', '需人工确认后生效 · 依据：政策原文 §4 + 电价历史数据'],
+    [4.8, 'human', '研究员复核通过，决策案更新至 v1.5', '结论变化留痕：布局建议由"优先布局"强化为"加快落地"；成立条件不变'],
+  ];
+  const body = document.getElementById('ulog-body');
+  body.innerHTML = '';
+  document.getElementById('ulog').classList.add('show');
+  let i = 0;
+  const timer = setInterval(() => {
+    if (i >= log.length) { clearInterval(timer); toast('<b>决策案已更新至 v1.5</b>　全程留痕，可逐条溯源'); return; }
+    const [_, who, title, desc] = log[i];
+    body.insertAdjacentHTML('beforeend', `
+      <div class="update-item">
+        <div class="u-time">+${log[i][0].toFixed(1)}s</div>
+        <div class="u-body">
+          <h4>${title}<span class="impact-pill" style="background:${who==='human'?'var(--green-ghost)':'var(--amber-ghost)'};color:${who==='human'?'var(--green)':'var(--amber)'}">${who==='human'?'人工复核':'自动'}</span></h4>
+          <p>${desc}</p>
+        </div>
+      </div>`);
+    i++;
+  }, 1100);
+  toast('模拟事件已触发：正在执行研究更新链路…');
+  document.getElementById('upd-badge').style.display = '';
+}
+
+/* ================= 条形动画 ================= */
+function animateBars(pageId) {
+  const pg = document.getElementById(pageId);
+  if (!pg) return;
+  requestAnimationFrame(() => {
+    pg.querySelectorAll('.b-fill, .d-bar').forEach(el => { el.style.width = '0'; });
+    requestAnimationFrame(() => {
+      pg.querySelectorAll('.b-fill, .d-bar').forEach(el => { el.style.width = el.dataset.w + '%'; });
+    });
+  });
+}
+
+/* ================= 初始化 ================= */
+renderFeed(); renderHype(); renderP2('all'); renderRp(); renderCap();
+setTimeout(() => animateBars('p1'), 80);
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- skill: html-document/v0.1 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>观澜 · 用户使用流程与系统讲解</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&family=Noto+Sans+SC:wght@400;500&family=Noto+Serif+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #faf9f5;
+  --surface-soft: #f5f0e8;
+  --surface-card: #efe9de;
+  --hairline: #e6dfd8;
+  --ink: #141413;
+  --ink-body: #3d3d3a;
+  --ink-muted: #6c6a64;
+  --ink-subtle: #8e8b82;
+  --primary: #cc785c;
+  --primary-soft: rgba(204, 120, 92, 0.12);
+  --font-serif: "Noto Serif SC", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", "Noto Sans SC", -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--canvas);
+  color: var(--ink-body);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.75;
+}
+a { color: var(--primary); }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+main {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 72px 24px 120px;
+}
+.kicker {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-subtle);
+  margin-bottom: 18px;
+}
+h1 {
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.18;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.lede {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin-bottom: 36px;
+}
+.three {
+  background: var(--surface-soft);
+  padding: 28px 28px 8px;
+  margin-bottom: 48px;
+}
+.three h2 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+.three ol { margin: 0 0 20px 1.2em; }
+.three li { margin-bottom: 12px; }
+h2 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 56px 0 16px;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 28px 0 8px;
+}
+p { margin-bottom: 1em; }
+.step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 8px 18px;
+  padding: 22px 0;
+  border-top: 1px solid var(--hairline);
+}
+.step:first-of-type { border-top: none; }
+.n {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.say {
+  font-size: 15px;
+  color: var(--ink-muted);
+  padding: 10px 14px;
+  border-left: 2px solid var(--primary);
+  margin: 8px 0 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin: 0 0 28px;
+}
+th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--ink-subtle);
+  padding: 8px 8px 8px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+td {
+  padding: 10px 8px 10px 0;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+.minute {
+  background: var(--surface-card);
+  padding: 24px 26px;
+  margin: 36px 0;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  line-height: 1.55;
+}
+@media (max-width: 520px) {
+  h1 { font-size: 32px; }
+  .step { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">上手说明 · 演示环境</p>
+  <h1>观澜是干什么的，打开以后点哪</h1>
+  <p class="lede">「观澜」出自《孟子·尽心上》：「观水有术，必观其澜」。我们以此为系统命题：看产业情报如观水，必看证据、政策与版本的起伏，才能把握场站配储机会的气势与本质。</p>
+  <p class="lede">给第一次打开系统的同事、客户和领导。不要求先懂储能术语。演示地址 guanlan.maybe404.com</p>
+
+  <div class="three">
+    <h2>先记住三句话</h2>
+    <ol>
+      <li>观澜是研究工作台，不是自动拍板的投资系统。它把资料、证据、比较和结论摆清楚，方便讨论下一步。它不会自动批准投资。</li>
+      <li>工作按「专题」分开。苏浙粤比三省是一桌；如东论证一个场站是另一桌。换专题等于换桌子。</li>
+      <li>有的内容跟着专题就出现，有的要你按一下。资料清单、场站、能力字段会自己出来。比较图、研究报告、新政策影响，需要你点按钮。转圈的时候用的是预生成演示稿，不是全网实时抓新闻。</li>
+    </ol>
+  </div>
+
+  <h2>帮谁、帮什么忙</h2>
+  <p>新能源场站发的电，有时中午发得出去、有时发不出，就有人研究要不要在场站旁边配储能。观澜帮战略研究、投资发展、场站技术做两件事：比江苏、浙江、广东哪里更值得先跟进；看某一个场站如果要配，功率和时长大概是什么方向。</p>
+  <p>它不管工程图纸、投标报价、财务模型算回报、法律尽调盖章。那些是后面的专业工作。</p>
+
+  <h2>打开后屏幕上有什么</h2>
+  <p>左边是导航。上面写「观澜」，下面「当前专题」可以换桌或新建。再下面七个页面。最底下可以切换深色/浅色。没有登录框，演示账号写死为张远。</p>
+  <table>
+    <thead><tr><th>左边看到的</th><th>可以把它想成</th></tr></thead>
+    <tbody>
+      <tr><td>业务专题</td><td>这一桌要回答什么问题</td></tr>
+      <tr><td>情报资料</td><td>桌上的材料袋</td></tr>
+      <tr><td>区域比较</td><td>三省对照表和场站名单</td></tr>
+      <tr><td>深度研究</td><td>写结论的地方（要生成才会出长文）</td></tr>
+      <tr><td>报告审查</td><td>给领导看的预览稿</td></tr>
+      <tr><td>动态跟踪</td><td>来了新消息怎么办、换不换版本</td></tr>
+      <tr><td>企业能力档案</td><td>咱们自己能干到哪（研究引用快照）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>几个词，用生活里的说法</h2>
+  <p><strong>资料</strong>：政策、电价表、招标、访谈。每份标明真实公开、真实内部或模拟。模拟是编出来方便演示的，不能当成公司已核实的资产。</p>
+  <p><strong>核验</strong>：人看过原文，判断能不能当依据。系统不替你判真假。</p>
+  <p><strong>声量 N 和证据 V</strong>：N 是登记了多少条热闹；V 是核验过能当证据的。热闹不等于真。系统故意不算「真实率」。</p>
+  <p><strong>建议档位</strong>：优先跟进、条件进入、持续观察、暂缓推进。硬条件没满足，再热闹也不能排最前。不清楚不等于没机会。</p>
+  <p><strong>版本</strong>：v1.4 已经确认的话，新政先出 v1.5 待确认。确认以前桌上仍以 v1.4 为准，避免系统自己改掉旧结论。</p>
+
+  <h2>第一次请按这个顺序走</h2>
+
+  <article class="step">
+    <div class="n">1</div>
+    <div>
+      <h3>看清这桌要研究什么</h3>
+      <p>点业务专题。看决策问题、是不是苏浙粤、做到哪天截止。不用先点「开始分析」。</p>
+      <p class="say">你要能说出：我们在比三省配储机会，不是在批一个投资项目。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">2</div>
+    <div>
+      <h3>翻材料袋</h3>
+      <p>点情报资料。预置专题里表已经在。点一行看原文。标题旁只有一个「导入资料」。原文太短不让存，空链接不算读过。</p>
+      <p class="say">模拟材料可以出现在桌上，但不拿来充真实声量。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">3</div>
+    <div>
+      <h3>看原文并留下核验</h3>
+      <p>点一条事实，打开证据侧栏。勾核验方式，选结果，写十个字以上说明，提交。刷新后还在，才算留下痕迹。演示常用电价编号（如 M-010），后面写结论还能点回来。</p>
+      <p class="say">核验是人做的。系统不会因为你点了「分析」就把待核验改成已核验。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">4</div>
+    <div>
+      <h3>先看三省和场站，再跑图</h3>
+      <p>点区域比较。卡片和名单已经在。图表要你点「运行比较分析」。雷达面积不是总分。再点如东场站：没有的数就空着，不要当成 0。场站不跟着「江苏省第一」自动继承。</p>
+      <p class="say">我们在比研究优先级，不是在给全省打一个神秘分数。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">5</div>
+    <div>
+      <h3>写出研究草稿</h3>
+      <p>点深度研究。小卡片是带出来的。长文要点「开始生成研究报告」。演示用预先写好的稿，不是现场把全网翻一遍。事实、推断、假设分开写。点资料编号应能回到原文。</p>
+      <p class="say">配置方向给下一步论证用，不是施工图。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">6</div>
+    <div>
+      <h3>给领导看的那一页</h3>
+      <p>点报告审查。封面跟着专题。研究生成过，结论会自动进来。审查意见至少十个字。这是接受这一版的写法，不是董事会批准投资。不行就退回草稿。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">7</div>
+    <div>
+      <h3>来了新政策</h3>
+      <p>点动态跟踪。历史事件本来就在。点「分析新增资料」。确认以前，旧版 v1.4 仍是正式说法。征求意见稿只作为情景。确认后两版都能查，反复点不会复制版本。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">8</div>
+    <div>
+      <h3>能力变了，结论跟不跟</h3>
+      <p>企业能力字段一开始就在。只有点「模拟编辑此字段」之后，才列出哪些结论引用了这个字段。不该把无关结论全部改掉。</p>
+    </div>
+  </article>
+  <article class="step">
+    <div class="n">9</div>
+    <div>
+      <h3>换一桌，证明没把东西带过去</h3>
+      <p>左边换成如东专题。资料变少、场站变少，没有把苏浙粤那套已确认结论原封搬过来。</p>
+    </div>
+  </article>
+
+  <h2>常见卡住</h2>
+  <p><strong>图或研究报告不出？</strong> 先看有没有资料。空的就导入或载入演示包。长文一定要先点生成。</p>
+  <p><strong>报告没有结论？</strong> 先去深度研究生成。封面可以先有。</p>
+  <p><strong>一进来为什么不是正在 AI 分析？</strong> 故意的。清单跟着专题走；分析你点了才跑。</p>
+  <p><strong>能不能当生产系统用？</strong> 不能。没有完整账号权限、没有真实采集、没有财务引擎。</p>
+
+  <div class="minute">
+    给领导的一分钟：观澜把「场站配储该先看哪、某一站大概怎么配」放在同一套专题里。资料能回到原文，核验留痕，比较不算假总分，新政策先出待确认版、不覆盖已确认的旧结论。系统不自动批准投资。现在看到的是带真实公开政策和模拟业务数据的演示。
+  </div>
+  <p>对外逐步口播见演讲稿。是否达标见测试用例与验收报告。</p>
+</main>
+</body>
+</html>

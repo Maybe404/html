@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新能源企业情报研究方案 · 需求分析（五年级也能看懂版）</title>
+<style>
+  :root {
+    --ink: #1f2d3d;
+    --sub: #5b6b7f;
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --green: #0e7a5f;
+    --green-light: #e6f5ef;
+    --amber: #b97a1e;
+    --amber-light: #fdf3e3;
+    --blue: #2b6cb0;
+    --blue-light: #e8f1fb;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --line: #e3e9ef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    padding: 32px 16px 80px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  header.hero {
+    background: linear-gradient(135deg, #0b5c46 0%, #0e7a5f 60%, #17987a 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 44px 36px;
+    margin-bottom: 28px;
+  }
+  .hero .tag {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    border-radius: 999px;
+    font-size: 13px;
+    padding: 4px 14px;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 { font-size: 28px; margin-bottom: 10px; }
+  .hero p { font-size: 15px; opacity: .92; max-width: 620px; }
+  .hero .slogan {
+    margin-top: 18px;
+    font-size: 17px;
+    font-weight: 600;
+    border-left: 4px solid rgba(255,255,255,.7);
+    padding-left: 14px;
+  }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 32px;
+  }
+  nav.toc strong { display: block; margin-bottom: 8px; font-size: 14px; color: var(--sub); }
+  nav.toc a {
+    display: inline-block;
+    margin: 4px 8px 4px 0;
+    color: var(--green);
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--green);
+  }
+
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 30px 32px;
+    margin-bottom: 26px;
+  }
+  section.card > h2 {
+    font-size: 21px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .num {
+    background: var(--green);
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex: none;
+  }
+  .lead { color: var(--sub); font-size: 14px; margin-bottom: 18px; }
+
+  .analogy {
+    background: var(--amber-light);
+    border-left: 4px solid var(--amber);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    font-size: 15px;
+    margin: 14px 0;
+  }
+  .analogy::before { content: "🌰 打个比方"; font-weight: 700; color: var(--amber); display: block; margin-bottom: 4px; font-size: 13px; }
+
+  .grid { display: grid; gap: 14px; margin-top: 14px; }
+  .grid.two { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .mini {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 14px;
+    background: #fbfcfd;
+  }
+  .mini h3 { font-size: 15px; margin-bottom: 6px; }
+  .mini.g h3 { color: var(--green); }
+  .mini.b h3 { color: var(--blue); }
+  .mini.r h3 { color: var(--red); }
+
+  ul.plain { padding-left: 22px; }
+  ul.plain li { margin: 6px 0; font-size: 15px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 14px;
+    background: #fff;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--green-light); color: #0b5c46; font-weight: 700; }
+
+  .steps { counter-reset: step; margin-top: 16px; }
+  .step {
+    position: relative;
+    padding: 16px 18px 16px 62px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    background: #fbfcfd;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 16px; top: 16px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .step h3 { font-size: 16px; margin-bottom: 4px; }
+  .step p { font-size: 14px; color: var(--sub); }
+  .step p b { color: var(--ink); }
+
+  .note {
+    background: var(--blue-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    margin-top: 14px;
+    color: #1a4a78;
+  }
+  .warn {
+    background: var(--red-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    margin-top: 14px;
+    color: #8a2318;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--sub);
+    font-size: 13px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    header.hero { padding: 30px 22px; }
+    .hero h1 { font-size: 22px; }
+    section.card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="tag">中国绿发集团 · 观风·产业智研黑客松 · 课题二</span>
+  <h1>新能源企业：辨明市场机会，支撑业务布局</h1>
+  <p>一份连小学五年级、完全不懂业务的同学也能看懂的需求分析和执行思路。</p>
+  <div class="slogan">让情报形成洞察，让研究支撑决策</div>
+</header>
+
+<nav class="toc">
+  <strong>目录（点着看）</strong>
+  <a href="#s1">1. 这是要做什么事？</a>
+  <a href="#s2">2. 客户是谁？</a>
+  <a href="#s3">3. 客户头疼什么？</a>
+  <a href="#s4">4. 我们要造的东西</a>
+  <a href="#s5">5. 信息从哪里来？</a>
+  <a href="#s6">6. 怎么交付才算合格？</a>
+  <a href="#s7">7. 评委怎么打分？</a>
+  <a href="#s8">8. 执行思路：一步步怎么做</a>
+  <a href="#s9">9. 容易踩的坑</a>
+</nav>
+
+<!-- 1 -->
+<section class="card" id="s1">
+  <h2><span class="num">1</span>这是要做什么事？</h2>
+  <p class="lead">一句话：帮一家新能源公司（比如做储能的）回答一个问题——"我该去哪个地方、做什么产品、投哪个项目？"</p>
+  <div class="analogy">
+    就像你想在学校门口开个小卖部：不能拍脑袋就开，你得先打听——放学有多少人路过？隔壁已经有几家小卖部？他们卖什么、生意好不好？我有没有本事卖得比别人便宜或更新鲜？打听清楚、想明白，再决定"开不开、开在哪、卖什么"。<b>我们这次要做的，就是把"打听 + 想明白"这件事做成一个专业工具，帮新能源公司做同样的决定。</b>
+  </div>
+  <ul class="plain">
+    <li><b>黑客松</b>（Hackathon）：一场限时比赛，各组组队做出一个能演示的产品原型来参赛。</li>
+    <li><b>产业情报</b>：从外面收集的消息，比如新出了什么政策、哪里在招标、哪个项目开工了。</li>
+    <li><b>新能源</b>：风电、光伏、储能（存电的大电池）这类不烧煤烧油的能源生意。</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="card" id="s2">
+  <h2><span class="num">2</span>客户是谁？</h2>
+  <p class="lead">客户 = 我们做的东西给谁用、谁会用它来干活。</p>
+  <ul class="plain">
+    <li><b>战略团队</b>：决定公司未来几年往哪个方向走的人。</li>
+    <li><b>市场团队</b>：盯外面市场变化、找商机的人。</li>
+    <li><b>业务拓展团队</b>：到处跑、谈项目、签合同的人。</li>
+  </ul>
+  <div class="analogy">
+    相当于学校的"社团发展方向小组"：有人管社团整体往哪走（战略），有人看别的社团流行什么（市场），有人负责去找场地、拉赞助（拓展）。我们做的工具，就是给这三种人一起用的"情报工作台"。
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="card" id="s3">
+  <h2><span class="num">3</span>客户头疼什么？（核心痛点）</h2>
+  <p class="lead">三个大坑，也是我们方案的靶心。</p>
+  <div class="grid two">
+    <div class="mini r">
+      <h3>坑一：真假难辨</h3>
+      <p>政府说支持，不代表真有需求；项目签了约，不代表真的会建起来开工。就像同学说"我一定参加活动"，到场率未必高。<b>市场热度难辨真伪，项目进展缺少核验。</b></p>
+    </div>
+    <div class="mini r">
+      <h3>坑二：一盘散沙</h3>
+      <p>技术变了、供给需求变了、对手也变了，这三件事互相影响；但市场、技术、各地区团队的信息各管各的，没人拼成一张完整的图。</p>
+    </div>
+    <div class="mini r">
+      <h3>坑三：脱离实际</h3>
+      <p>研究结论常常说"这市场很大"，却没想过"我们公司干不干得了"。就像研究报告说"开奶茶店很赚钱"，可你根本不会做奶茶。<b>外部趋势与内部能力难以关联。</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="card" id="s4">
+  <h2><span class="num">4</span>我们要造的东西（攻关方向）</h2>
+  <p class="lead">选一种新能源业务，设计一个<b>融合外部情报 + 内部资料</b>的综合研究方案，并做成产品原型。</p>
+  <ul class="plain">
+    <li><b>持续跟踪</b>市场需求：不是写一篇报告就完，而是像天气预报一样不断更新。</li>
+    <li><b>盯项目落地</b>：项目是真的在推进，还是只停在签约？要能核验。</li>
+    <li><b>看竞争格局</b>：这块地盘上都有谁、谁强谁弱、门槛（进入条件）是什么。</li>
+    <li><b>支持更新</b>：一旦出现重要变化（比如新政策、对手降价），研究结论要能跟着改。</li>
+  </ul>
+  <div class="note">题目给了一个案例启发：以储能企业为例，比较<b>不同区域</b>的市场机会和进入条件，并跟踪新信息对布局判断的影响。案例只是参考，各组可自选具体业务。</div>
+</section>
+
+<!-- 5 -->
+<section class="card" id="s5">
+  <h2><span class="num">5</span>信息从哪里来？（情报来源）</h2>
+  <div class="grid two">
+    <div class="mini b">
+      <h3>外部（外面的世界）</h3>
+      <ul class="plain">
+        <li>能源政策（政府文件）</li>
+        <li>招投标信息（谁在公开采购）</li>
+        <li>项目公告（哪里要建什么）</li>
+        <li>线上行业与技术数据</li>
+      </ul>
+    </div>
+    <div class="mini g">
+      <h3>内部（公司自己的）</h3>
+      <ul class="plain">
+        <li>客户访谈记录</li>
+        <li>上下游伙伴交流</li>
+        <li>实地线下调研</li>
+        <li>内部项目资料</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">
+    就像写调查作文：一半内容从新闻、公告里查（外部），一半内容靠自己采访同学、实地观察（内部）。<b>两个来源要互相核对</b>——新闻说人很多，你实地一看没几个人，就要打个问号。这就是"跨信源分析、比较核验"。
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="card" id="s6">
+  <h2><span class="num">6</span>怎么交付才算合格？</h2>
+  <table>
+    <tr><th style="width:26%">交付项</th><th>要求（翻译成大白话）</th></tr>
+    <tr><td><b>综合业务方案</b></td><td>说清楚：客户是谁、核心问题是什么、方案值多少钱（价值在哪）。</td></tr>
+    <tr><td><b>产品原型</b></td><td>要有<b>多个相关的业务界面</b>，是一个完整能演示的产品，不是一张海报或一篇报告。</td></tr>
+    <tr><td><b>深度研究案例</b></td><td>关键结论要有出处、有据可查（谁说的、在哪查的），跨信源比较过、核验过。</td></tr>
+    <tr><td><b>商业可行性</b></td><td>回答三个问题：谁会掏钱买？为什么一直用？怎么证明它值钱？</td></tr>
+    <tr><td><b>诚信要求</b></td><td>演示用的模拟资料必须<b>标注出来</b>是模拟的，不能拿假数据冒充真的。</td></tr>
+  </table>
+  <div class="warn"><b>产品边界（红线）：</b>必须是专业业务应用，<b>不能</b>做成简单的聊天机器人；也不能用一张单页看板或一篇报告来糊弄——要的是综合方案。</div>
+</section>
+
+<!-- 7 -->
+<section class="card" id="s7">
+  <h2><span class="num">7</span>评委怎么打分？</h2>
+  <p class="lead">总分 100，四块拼图，缺哪块都拿不到高分。</p>
+  <table>
+    <tr><th style="width:22%">维度</th><th style="width:14%">占比</th><th>评委在看什么</th></tr>
+    <tr><td><b>客户价值</b></td><td><b>30%</b></td><td>是不是真解决了第 3 节那些痛点？客户用完真能做更好的决定？</td></tr>
+    <tr><td><b>情报与研究</b></td><td><b>30%</b></td><td>信息全不全、有没有交叉核验、结论靠不靠谱、能不能持续更新。</td></tr>
+    <tr><td><b>产品与演示</b></td><td><b>25%</b></td><td>原型好不好用、逻辑顺不顺、演示讲不讲得清。</td></tr>
+    <tr><td><b>商业可行性</b></td><td><b>15%</b></td><td>有没有人愿意付费、凭什么持续付费。</td></tr>
+  </table>
+  <div class="note">注意权重：<b>客户价值 + 情报研究占 60%</b>——说明评委最看重"真的有用、真的靠谱"，界面漂亮只是加分项，不是主菜。</div>
+</section>
+
+<!-- 8 -->
+<section class="card" id="s8">
+  <h2><span class="num">8</span>执行思路：一步步怎么做</h2>
+  <p class="lead">从零到参赛的完整路线图。</p>
+  <div class="steps">
+    <div class="step">
+      <h3>定业务、定场景</h3>
+      <p>全组讨论选定一种新能源业务（如储能），划定研究的区域范围（如华东 vs 西北）。<b>先想清楚客户每天用它干的 3 件核心事。</b></p>
+    </div>
+    <div class="step">
+      <h3>画业务流程</h3>
+      <p>把客户"收集情报 → 分析研究 → 做出判断 → 出现新变化 → 更新结论"这条循环画成流程图。这一步定了产品的骨架。</p>
+    </div>
+    <div class="step">
+      <h3>设计情报体系</h3>
+      <p>列出要用哪些外部信源（政策、招投标、公告）和内部资料，设计<b>交叉核验规则</b>：一条信息至少要另一个来源印证才算可信。</p>
+    </div>
+    <div class="step">
+      <h3>做深度研究案例</h3>
+      <p>亲手做 1 个完整案例（如"某两个省的储能市场对比"），每个结论都标出处。这个案例既是研究底稿，也是演示素材。</p>
+    </div>
+    <div class="step">
+      <h3>搭产品原型</h3>
+      <p>围绕流程设计<b>多个界面</b>：情报看板、项目核验列表、区域机会对比、布局决策页、变化更新提醒……界面之间要能串成一个故事。</p>
+    </div>
+    <div class="step">
+      <h3>接商业逻辑</h3>
+      <p>想清楚收费模式：卖给谁（企业战略部）、按什么收（订阅费/项目费）、凭什么持续用（情报不断更新）。演示数据标好"模拟"。</p>
+    </div>
+    <div class="step">
+      <h3>排练演示</h3>
+      <p>按评分权重排剧本：先讲客户痛点（30%）、再演研究过程与核验（30%）、然后走产品（25%）、最后谈商业可行性（15%）。</p>
+    </div>
+    <div class="step">
+      <h3>预留"变化更新"演示环节</h3>
+      <p>现场演示时模拟一条"新政策出台"，展示系统如何触发研究更新、结论如何变化——这是题目的加分点，也是与别组拉开差距的地方。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="card" id="s9">
+  <h2><span class="num">9</span>容易踩的坑</h2>
+  <ul class="plain">
+    <li>❌ 做成聊天机器人 → 直接出局（题目红线）。</li>
+    <li>❌ 只有一张漂亮看板 / 一篇报告 → 不算综合方案。</li>
+    <li>❌ 结论没出处 → 情报与研究 30% 拿不到。</li>
+    <li>❌ 假数据不标注 → 诚信扣分。</li>
+    <li>❌ 只讲外部市场、不讲"我们公司能不能干" → 没解决坑三。</li>
+    <li>❌ 只做一次性研究、不能更新 → 丢了"持续"这个关键词。</li>
+  </ul>
+</section>
+
+<footer>
+  观风·产业智研黑客松 · 课题二：新能源企业 · 需求分析笔记 · 2026-09-18<br>
+  模拟资料说明：本文为需求解读文档，非客户原始材料
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+<style>
+[data-theme="life"]{--bg:#ffffff;--paper:#ffffff;--ink:#16181d;--body:#3a3d44;--muted:#80838a;--line:rgba(22,24,29,.10);--ph:#f2f2f0;--shadow:rgba(20,24,32,.08);--glass:rgba(255,255,255,.42);--glass-edge:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 1px rgba(20,24,32,.04),inset 0 0 0 .5px rgba(20,24,32,.08);--knob:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.72));--knob-edge:inset 0 1px 0 #fff,inset 0 0 0 .5px rgba(20,24,32,.10),0 3px 10px rgba(20,24,32,.10),0 1px 2px rgba(20,24,32,.06);--aura:oklch(0.86 0.06 78 / .35);--aura2:oklch(0.88 0.04 240 / .30);--gold:oklch(0.72 0.10 75)}
+[data-theme="pro"]{--bg:#141923;--paper:#1b212d;--ink:#ede7da;--body:#c9c3b6;--muted:#8d8a84;--line:rgba(237,231,218,.12);--ph:rgba(237,231,218,.06);--shadow:rgba(0,0,0,.4);--glass:rgba(255,255,255,.06);--glass-edge:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 1px rgba(0,0,0,.25),inset 0 0 0 .5px rgba(255,255,255,.10);--knob:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));--knob-edge:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 .5px rgba(255,255,255,.14),0 3px 12px rgba(0,0,0,.35);--aura:oklch(0.55 0.08 78 / .18);--aura2:oklch(0.50 0.06 250 / .20);--gold:oklch(0.76 0.10 80)}
+html,body{margin:0;background:#ffffff}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none;transition:color .6s ease}
+a:hover{color:var(--ink)}
+button{font:inherit}
+::selection{background:color-mix(in oklch,var(--gold) 32%,transparent)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes veil{from{opacity:0}to{opacity:1}}
+@keyframes unfold{from{opacity:0;filter:blur(6px);transform:translateY(6px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div data-theme="{{ mode }}" style="position:relative;z-index:0;isolation:isolate;min-height:100vh;background:var(--bg);color:var(--ink);font-family:{{ bodyFont }};font-weight:500;-webkit-font-smoothing:antialiased;overflow-x:hidden">
+
+  <div ref="{{ inkRef }}" style="position:fixed;left:50%;top:0;width:10px;height:10px;border-radius:50%;pointer-events:none;z-index:90;opacity:0;filter:blur(36px);transform:translate(-50%,-50%) scale(0)"></div>
+
+  <div style="position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(38% 28% at 38% -4%,var(--aura),transparent 70%),radial-gradient(34% 26% at 64% -2%,var(--aura2),transparent 70%)"></div>
+
+  <header style="position:sticky;top:0;z-index:40">
+    <div style="max-width:1120px;margin:0 auto;padding:24px 56px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px">
+      <div style="display:flex">
+        <a href="#" onClick="{{ goHome }}" style="padding-bottom:2px;font-family:'EB Garamond',serif;font-size:20px;color:var(--ink);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">Home</a>
+      </div>
+      <div style="position:relative;display:flex;width:236px;padding:4px;border-radius:999px;background:var(--glass);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:var(--glass-edge),0 10px 30px var(--shadow);transition:box-shadow .6s,transform .6s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.02);box-shadow:var(--glass-edge),0 14px 40px var(--shadow)">
+        <div style="position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--knob);box-shadow:var(--knob-edge);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transform:translateX({{ indX }});transition:transform .6s cubic-bezier(.65,0,.35,1)"></div>
+        <button onClick="{{ toPro }}" style="position:relative;flex:1 1 0;padding:7px 0;border:none;background:transparent;cursor:pointer;font-family:'EB Garamond',serif;font-size:15px;color:{{ proColor }};transition:color .6s">Professional</button>
+        <button onClick="{{ toLife }}" style="position:relative;flex:1 1 0;padding:7px 0;border:none;background:transparent;cursor:pointer;font-family:'EB Garamond',serif;font-size:15px;color:{{ lifeColor }};transition:color .6s">Personal</button>
+      </div>
+      <div></div>
+    </div>
+  </header>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Home" style="max-width:1120px;margin:0 auto;padding:0 56px;animation:rise .6s cubic-bezier(.2,.7,.2,1) both">
+    <section style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 0 64px">
+      <a href="#" onClick="{{ goAbout }}" style="position:relative;display:block;width:148px;height:148px;border-radius:50%;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s" style-hover="transform:scale(1.03);box-shadow:0 18px 50px var(--shadow)">
+        <div style="position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in oklch,var(--gold) 60%,transparent)"></div>
+        <div style="position:absolute;inset:7px;border-radius:50%;background:var(--ph);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted)">{{ avatarLabel }}</div>
+      </a>
+      <h1 style="margin:28px 0 0;font-family:'EB Garamond',serif;font-weight:500;font-size:56px;line-height:1.05;color:var(--ink)">{{ brand }}</h1>
+    </section>
+
+    <section style="display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 64px;padding-bottom:64px">
+      <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Now</h2>
+      <p style="flex:1 1 420px;min-width:0;margin:0;font-family:'Cormorant Garamond','LXGW WenKai',serif;font-style:italic;font-weight:500;font-size:1.5rem;line-height:1.5;letter-spacing:.01em;color:var(--ink);text-wrap:pretty">{{ taglineEl }}</p>
+    </section>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;padding-bottom:64px">
+      <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:var(--gold)"></div>
+      <div style="width:80px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)"></div>
+    </div>
+
+    <sc-if value="{{ isPro }}" hint-placeholder-val="{{ false }}">
+      <section style="display:flex;flex-wrap:wrap;gap:12px 64px;padding-bottom:64px">
+        <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Work</h2>
+        <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:24px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:28px 24px">
+            <sc-for list="{{ homeWorks }}" as="w" hint-placeholder-count="4">
+              <a href="#" onClick="{{ w.open }}" style="display:flex;flex-direction:column;gap:12px;color:var(--ink)">
+                <div style="aspect-ratio:4/3;overflow:hidden;border-radius:3px;background:var(--ph)">
+                  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.03)">{{ w.shot }}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                  <span style="padding-bottom:1px;font-family:'EB Garamond',serif;font-size:20px;background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">{{ w.title }}</span>
+                  <span style="flex:none;font-size:15px;color:var(--muted)">{{ w.kind }}</span>
+                </div>
+              </a>
+            </sc-for>
+          </div>
+          <div style="display:flex">
+            <a href="#" onClick="{{ goWorks }}" style="padding-bottom:2px;font-size:16px;color:var(--muted);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1),color .6s" style-hover="background-size:100% 1px;color:var(--ink)">All work →</a>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <section style="display:flex;flex-wrap:wrap;gap:12px 64px;padding-bottom:64px">
+      <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Posts</h2>
+      <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ posts }}" as="p" hint-placeholder-count="5">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:24px">
+            <span style="min-width:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 10px">
+              <a href="#" onClick="{{ p.open }}" style="padding-bottom:1px;font-family:'EB Garamond','LXGW WenKai','Noto Serif SC',serif;font-weight:400;font-size:1.25rem;line-height:1.6;color:var(--ink);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">{{ p.title }}</a>
+              <span style="font-family:'EB Garamond',serif;font-size:0.75rem;color:var(--muted)">{{ p.meta }}</span>
+            </span>
+            <span style="flex:none;font-family:'EB Garamond',serif;font-size:0.875rem;color:var(--muted)">{{ p.date }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <sc-if value="{{ isLife }}" hint-placeholder-val="{{ true }}">
+      <section style="display:flex;flex-wrap:wrap;gap:12px 64px;padding-bottom:64px">
+        <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Reading</h2>
+        <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ reading }}" as="r" hint-placeholder-count="5">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:24px">
+              <span style="min-width:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 10px">
+                <a href="{{ r.href }}" target="_blank" style="padding-bottom:1px;font-family:'EB Garamond','LXGW WenKai','Noto Serif SC',serif;font-weight:400;font-size:1.25rem;line-height:1.6;color:var(--ink);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">{{ r.title }}</a>
+                <span style="font-size:14px;color:var(--muted)">{{ r.by }}</span>
+              </span>
+              <span style="flex:none;font-family:'EB Garamond',serif;font-size:16px;color:var(--muted)">{{ r.type }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-wrap:wrap;gap:12px 64px;padding-bottom:64px">
+        <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Photos</h2>
+        <div style="flex:1 1 420px;min-width:0;column-count:3;column-gap:12px">
+          <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="6">
+            <a href="#" onClick="{{ ph.open }}" style="display:block;break-inside:avoid;margin-bottom:12px;overflow:hidden;border-radius:3px;background:var(--ph);color:var(--muted)">
+              <div style="aspect-ratio:{{ ph.ratio }};display:flex;align-items:flex-end;padding:10px 12px;font-size:12px;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.03)">{{ ph.caption }}</div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isWorks }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Work" style="max-width:1120px;margin:0 auto;padding:40px 56px 0;animation:rise .6s cubic-bezier(.2,.7,.2,1) both">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px">
+      <div style="max-width:520px">
+        <h1 style="margin:0;font-family:'EB Garamond',serif;font-weight:500;font-size:48px">Work</h1>
+        <p style="margin:12px 0 0;font-size:18px;line-height:1.7;color:var(--body);text-wrap:pretty">{{ workIntro }}</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:20px">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+          <button onClick="{{ f.pick }}" style="padding:0 0 2px;border:none;background:linear-gradient(var(--gold),var(--gold)) left bottom / {{ f.line }} 1px no-repeat;color:{{ f.color }};cursor:pointer;font-family:'EB Garamond',serif;font-size:16px;transition:background-size .6s cubic-bezier(.2,.7,.2,1),color .6s" style-hover="background-size:100% 1px;color:var(--ink)">{{ f.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div ref="{{ gridRef }}" style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:36px 24px;transition:opacity .45s ease">
+      <sc-for list="{{ worksShown }}" as="x" hint-placeholder-count="6">
+        <a href="#" onClick="{{ x.open }}" style="display:flex;flex-direction:column;gap:12px;color:var(--ink)">
+          <div style="aspect-ratio:4/3;overflow:hidden;border-radius:3px;background:var(--ph)">
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.03)">{{ x.shot }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <span style="padding-bottom:1px;font-family:'EB Garamond',serif;font-size:21px;background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">{{ x.title }}</span>
+              <span style="flex:none;font-family:'EB Garamond',serif;font-size:15px;color:var(--muted)">{{ x.kind }} · {{ x.year }}</span>
+            </div>
+            <span style="font-size:15px;line-height:1.7;color:var(--body)">{{ x.desc }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="About" style="max-width:1120px;margin:0 auto;padding:40px 56px 0;animation:rise .6s cubic-bezier(.2,.7,.2,1) both">
+    <h1 style="margin:0 0 48px;font-family:'EB Garamond',serif;font-weight:500;font-size:48px">About</h1>
+    <section style="display:flex;flex-wrap:wrap;gap:12px 64px;padding-bottom:56px">
+      <div style="flex:0 0 220px"></div>
+      <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:20px;font-size:18px;line-height:1.9;color:var(--body);text-wrap:pretty">
+        <p style="margin:0">{{ ab.p1 }}</p>
+        <p style="margin:0">{{ ab.p2 }}</p>
+      </div>
+    </section>
+    <section style="display:flex;flex-wrap:wrap;gap:12px 64px">
+      <h2 style="flex:0 0 220px;margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;line-height:1.3">Path</h2>
+      <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ ab.path }}" as="p" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;align-items:baseline">
+            <span style="font-family:'EB Garamond',serif;font-size:17px;color:var(--gold)">{{ p.year }}</span>
+            <span style="font-size:17px;line-height:1.7;color:var(--body)">{{ p.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isPost }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Post" style="max-width:720px;margin:0 auto;padding:40px 56px 0;animation:rise .6s cubic-bezier(.2,.7,.2,1) both">
+    <h1 style="margin:0;font-family:{{ titleFont }};font-weight:500;font-size:44px;line-height:1.3;letter-spacing:{{ titleSpacing }};text-wrap:balance">{{ post.title }}</h1>
+    <div style="margin-top:12px;font-family:'EB Garamond',serif;font-size:16px;color:var(--muted)">{{ post.date }} {{ post.meta }}</div>
+    <div style="display:flex;flex-direction:column;gap:24px;margin-top:48px;font-size:18px;line-height:2;color:var(--body);text-wrap:pretty">
+      <sc-for list="{{ article }}" as="b" hint-placeholder-count="5">
+        <sc-if value="{{ b.isH }}" hint-placeholder-val="{{ false }}"><h2 style="margin:20px 0 0;font-family:{{ titleFont }};font-weight:500;font-size:26px;color:var(--ink)">{{ b.text }}</h2></sc-if>
+        <sc-if value="{{ b.isP }}" hint-placeholder-val="{{ true }}"><p style="margin:0">{{ b.text }}</p></sc-if>
+        <sc-if value="{{ b.isQ }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:12px 0;padding:0 32px;text-align:center">
+            <p style="margin:0;font-size:22px;line-height:1.8;color:var(--ink)">{{ b.text }}</p>
+            <div style="margin-top:10px;font-size:14px;color:var(--muted)">{{ b.by }}</div>
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+  </main>
+  </sc-if>
+
+  <footer style="max-width:1120px;margin:0 auto;padding:32px 56px 64px;display:flex;flex-direction:column;align-items:center;gap:24px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))"></div>
+      <div style="width:5px;height:5px;border-radius:50%;border:1px solid var(--gold)"></div>
+      <div style="width:60px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px 32px">
+      <sc-for list="{{ links }}" as="l" hint-placeholder-count="3">
+        <a href="{{ l.href }}" target="_blank" style="padding-bottom:2px;font-family:'EB Garamond',serif;font-size:16px;color:var(--muted);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1),color .6s" style-hover="background-size:100% 1px;color:var(--ink)">{{ l.label }}</a>
+      </sc-for>
+    </div>
+  </footer>
+
+  <sc-if value="{{ hasModal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:32px;background:color-mix(in oklch,var(--bg) 40%,transparent);backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1);animation:veil .6s ease both">
+      <div onClick="{{ stop }}" style="width:100%;max-width:{{ modal.maxW }};max-height:calc(100vh - 64px);overflow:auto;background:var(--glass);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);box-shadow:var(--glass-edge),0 40px 100px var(--shadow);border-radius:20px;padding:12px;animation:pop .6s cubic-bezier(.2,.7,.2,1) both">
+        <div style="aspect-ratio:{{ modal.ratio }};border-radius:3px;background:var(--ph);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted)">{{ modal.shot }}</div>
+        <div style="padding:22px 14px 10px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+            <span style="font-family:'EB Garamond','LXGW WenKai','Noto Serif SC',serif;font-size:28px;color:var(--ink)">{{ modal.title }}</span>
+            <span style="font-family:'EB Garamond',serif;font-size:15px;color:var(--muted)">{{ modal.meta }}</span>
+          </div>
+          <p style="margin:0;font-size:16px;line-height:1.8;color:var(--body)">{{ modal.desc }}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap">
+            <button onClick="{{ closeModal }}" style="padding:0 0 2px;border:none;background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;color:var(--muted);cursor:pointer;font-family:'EB Garamond',serif;font-size:15px;transition:background-size .6s cubic-bezier(.2,.7,.2,1),color .6s" style-hover="background-size:100% 1px;color:var(--ink)">Close · Esc</button>
+            <sc-if value="{{ modal.hasLink }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ modal.href }}" target="_blank" style="padding-bottom:2px;font-family:'EB Garamond',serif;font-size:15px;color:var(--ink);background:linear-gradient(var(--gold),var(--gold)) left bottom / 0% 1px no-repeat;transition:background-size .6s cubic-bezier(.2,.7,.2,1)" style-hover="background-size:100% 1px">Visit ↗</a>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;life&quot;,&quot;pro&quot;],&quot;default&quot;:&quot;life&quot;,&quot;tsType&quot;:&quot;'life'|'pro'&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:300,&quot;max&quot;:1000,&quot;step&quot;:50,&quot;unit&quot;:&quot;ms&quot;,&quot;default&quot;:450,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { view: 'home', mode: null, postId: 0, filter: 'all', modal: null };
+  inkRef = React.createRef();
+  Typer = ({ text }) => {
+    const [n, setN] = React.useState(0);
+    React.useEffect(() => {
+      let i = 0, t;
+      const step = () => { i++; setN(i); if (i < text.length) t = setTimeout(step, 55 + Math.random() * 45); };
+      t = setTimeout(step, 600);
+      return () => clearTimeout(t);
+    }, [text]);
+    const e = React.createElement;
+    return e('span', { style: { display: 'grid' } },
+      e('span', { 'aria-hidden': true, style: { gridArea: '1/1', visibility: 'hidden' } }, text, e('span', { style: { display: 'inline-block', width: '.5em' } })),
+      e('span', { 'aria-label': text, style: { gridArea: '1/1' } }, text.slice(0, n),
+        e('span', { style: { display: 'inline-block', width: '1.5px', height: '.9em', marginLeft: '3px', verticalAlign: '-0.1em', background: 'var(--gold)', animation: 'blink 1s steps(1) infinite' } })));
+  };
+  gridRef = React.createRef();
+  componentDidMount() {
+    this.onKey = (e) => { if (e.key === 'Escape') this.setState({ modal: null }); };
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); }
+  dur() { return this.props.motion ?? 600; }
+  mode() { return this.state.mode ?? this.props.mode ?? 'life'; }
+  ink(e, patch) {
+    e && e.preventDefault && e.preventDefault();
+    const el = this.inkRef.current, d = this.dur();
+    if (!el || !el.animate) { this.setState(patch); window.scrollTo(0, 0); return; }
+    const x = e && e.clientX ? e.clientX : innerWidth / 2, y = e && e.clientY ? e.clientY : 80;
+    const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) * 2.4;
+    const m = patch.mode ?? this.mode();
+    Object.assign(el.style, { left: x + 'px', top: y + 'px', width: R + 'px', height: R + 'px', background: m === 'pro' ? '#141923' : '#ffffff' });
+    el.animate([{ transform: 'translate(-50%,-50%) scale(0)', opacity: 0.9 }, { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 }], { duration: d, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' });
+    setTimeout(() => {
+      this.setState(patch);
+      window.scrollTo(0, 0);
+      el.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(1)', opacity: 0 }], { duration: d * 1.1, easing: 'ease-out', fill: 'forwards' });
+    }, d * 0.95);
+  }
+  fade(ref, fn) {
+    const el = ref.current;
+    if (!el) return fn();
+    el.style.opacity = 0;
+    setTimeout(() => { fn(); requestAnimationFrame(() => { if (ref.current) ref.current.style.opacity = 1; }); }, 300);
+  }
+  renderVals() {
+    const mode = this.mode(), pro = mode === 'pro';
+    const worksData = [
+      { title: 'Slow Type', kind: 'Open source', cat: 'oss', year: '2026', desc: 'Typesetting for Chinese on the web: punctuation, spacing, rhythm.', shot: 'project shot', href: 'https://github.com/maybe404' },
+      { title: 'Nest', kind: 'App', cat: 'app', year: '2026', desc: 'A journal that keeps one sentence a day.', shot: 'app screens', href: '#' },
+      { title: 'Prompt Shelf', kind: 'AI tool', cat: 'ai', year: '2025', desc: 'Your prompts as small, reusable cards.', shot: 'tool shot', href: '#' },
+      { title: 'Lumen', kind: 'Design', cat: 'design', year: '2025', desc: 'A warm interface study on light, paper and reading.', shot: 'design study', href: '#' },
+      { title: 'maybe404.com', kind: 'Open source', cat: 'oss', year: '2025', desc: 'This site. Theme and source are open.', shot: 'site shot', href: 'https://maybe404.com' },
+      { title: 'Drift', kind: 'App', cat: 'app', year: '2024', desc: 'White noise and a focus timer. One button.', shot: 'app screens', href: '#' },
+    ].map((w) => ({ ...w, open: (e) => { e.preventDefault(); this.setState({ modal: { title: w.title, meta: `${w.kind} · ${w.year}`, desc: w.desc, shot: w.shot, ratio: '16/10', maxW: '760px', href: w.href, hasLink: true } }); } }));
+    const filt = this.state.filter;
+    const filters = [['all', 'All'], ['oss', 'Open source'], ['app', 'Apps'], ['ai', 'AI tools'], ['design', 'Design']].map(([k, label]) => ({
+      label, line: filt === k ? '100%' : '0%', color: filt === k ? 'var(--ink)' : 'var(--muted)',
+      pick: () => filt !== k && this.fade(this.gridRef, () => this.setState({ filter: k })),
+    }));
+    const proPosts = [
+      { title: 'A year of building alone', meta: '· 8 min read', date: '12 Aug 2026' },
+      { title: 'Maintaining open source as one person', meta: '· 6 min read', date: '3 Jun 2026' },
+      { title: 'Small, complete products', meta: '· 4 min read', date: '9 Dec 2025' },
+    ];
+    const lifePosts = [
+      { title: '慢一点看', meta: '· 5 min read', date: '12 Sep 2026' },
+      { title: '好的东西像好的句子：去掉一个字就不成立。', meta: '', date: '3 Sep 2026' },
+      { title: '「行到水穷处，坐看云起时。」', meta: '', date: '21 Aug 2026' },
+      { title: '允许一切的发生', meta: '· 3 min read', date: '28 Jul 2026' },
+      { title: '雨天适合重读旧书', meta: '· 4 min read', date: '16 May 2026' },
+    ];
+    const posts = (pro ? proPosts : lifePosts).map((p, i) => ({ ...p, open: (e) => this.ink(e, { view: 'post', postId: i, modal: null }) }));
+    const P = (text) => ({ isP: true, text }), H = (text) => ({ isH: true, text }), Q = (text, by) => ({ isQ: true, text, by });
+    const article = pro
+      ? [P('When I started building on my own, I measured myself by speed. A release a week, a new project a month. Looking back, the things people still use are the few I slowed down for.'), P('This is a note to the version of me who was always in a hurry.'), H('The cost of fast'), P('Speed hides problems. Spacing that fights the headline, a colour alone on the page. They were always there; I just never stopped long enough to see them.'), Q('Simplicity is the ultimate sophistication.', 'Attributed to Leonardo da Vinci'), H('A small rule'), P('Now I leave every finished thing alone for a night, and look again in the morning with a stranger\u2019s eyes. Much of what felt clever looks unnecessary in early light.')]
+      : [P('这几年我越来越相信，大多数问题不是因为看得不够多，而是因为看得太快。信息在屏幕上一层层滑过，我们记住了很多标题，却很少记住一个细节。'), P('这篇文章写给那个总在赶路的自己。'), H('快的代价'), P('刚开始独立开发的时候，我以上线速度为荣。后来回头看，留下来被人用的，恰恰是那几个我反复打磨过的。'), Q('此中有真意，欲辨已忘言。', '陶渊明 · 《饮酒·其五》'), H('停下来的练习'), P('每做完一件东西，先离开它一晚。第二天早上再看，用陌生人的眼睛。很多自以为聪明的地方，在清晨的光里都显得多余。')];
+    const photos = [['3/4', '西湖 · 清晨'], ['4/3', '旧书店'], ['1/1', '窗台'], ['4/3', '雨后'], ['4/5', '山路'], ['3/2', '夜里的灯']]
+      .map(([ratio, caption]) => ({ ratio, caption, open: (e) => { e.preventDefault(); this.setState({ modal: { title: caption, meta: 'Photo · 2026', desc: '在这里写一句关于这张照片的话。', shot: 'photo', ratio, maxW: ['3/4', '4/5'].includes(ratio) ? '520px' : '820px', hasLink: false, href: '#' } }); } }));
+    const pick = (m) => (e) => m !== mode && this.ink(e, { mode: m, modal: null, view: 'home' });
+    const nav = (v) => (e) => this.ink(e, { view: v, modal: null });
+    const tag = pro ? 'Making small things with care — all the way through.' : 'Let it all unfold — slowly, quietly, in its own time.';
+    const taglineEl = React.createElement(this.Typer, { key: mode, text: tag });
+    return {
+      taglineEl,
+      mode, isPro: pro, isLife: !pro,
+      bodyFont: "'EB Garamond','LXGW WenKai','Noto Serif SC',serif",
+      titleFont: "'EB Garamond','LXGW WenKai','Noto Serif SC',serif",
+      titleSpacing: pro ? '0' : '.04em',
+      leadSize: pro ? '21px' : '18px', rowSize: '1.25rem',
+      inkRef: this.inkRef, gridRef: this.gridRef,
+      isHome: this.state.view === 'home', isWorks: this.state.view === 'works', isAbout: this.state.view === 'about', isPost: this.state.view === 'post',
+      brand: pro ? 'maybe404' : 'maybe',
+      avatarLabel: pro ? 'portrait' : 'illustration',
+      tagline: pro ? 'Independent developer, designing and building small, complete products.' : 'Let it all unfold.',
+      indX: pro ? '0%' : '100%', proColor: pro ? 'var(--ink)' : 'var(--muted)', lifeColor: pro ? 'var(--muted)' : 'var(--ink)',
+      toPro: pick('pro'), toLife: pick('life'),
+      goHome: nav('home'), goWorks: nav('works'), goAbout: nav('about'),
+      homeWorks: worksData.slice(0, 4),
+      worksShown: filt === 'all' ? worksData : worksData.filter((w) => w.cat === filt), filters,
+      workIntro: 'One person can only make a few things, so I try to finish each one properly.',
+      posts, post: posts[this.state.postId] || posts[0], article,
+      photos,
+      reading: [
+        { type: 'Book', title: '《悉达多》', by: '黑塞', href: '#' },
+        { type: 'Blog', title: 'Paul Graham Essays', by: 'paulgraham.com', href: 'https://paulgraham.com/articles.html' },
+        { type: 'Site', title: 'Are.na', by: '收集与连接灵感', href: 'https://www.are.na' },
+        { type: 'Book', title: '《设计中的设计》', by: '原研哉', href: '#' },
+      ],
+      links: [
+        { label: 'GitHub', href: 'https://github.com/maybe404' },
+        { label: 'Email', href: 'mailto:hello@maybe404.com' },
+        { label: 'Telegram', href: 'https://t.me/maybe404' },
+      ],
+      ab: pro ? {
+        p1: 'I\u2019m maybe404, an independent developer. I write code and design, and I like carrying an idea from a sketch all the way to launch.',
+        p2: 'Right now I maintain a few open-source projects, polish an app of my own, and build small AI tools when they\u2019re useful.',
+        path: [{ year: '2026', text: 'Full-time independent developer.' }, { year: '2024', text: 'Left my job to build on my own.' }, { year: '2020', text: 'Front-end and design at a tech company.' }, { year: '2016', text: 'Wrote my first line of code.' }],
+      } : {
+        p1: '在网上我叫 maybe，意思是：也许找不到，也没关系。',
+        p2: '这里记录那些慢慢发生的事。',
+        path: [{ year: '2026', text: '一个人做产品，也一个人好好生活。' }, { year: '2024', text: '离开公司，开始自己安排时间。' }, { year: '2020', text: '在城市里忙碌，也开始拍照。' }, { year: '2016', text: '写下第一行代码。' }],
+      },
+      hasModal: !!this.state.modal, modal: this.state.modal || {},
+      closeModal: () => this.setState({ modal: null }), stop: (e) => e.stopPropagation(),
+    };
+  }
+}
+</script>
+</body>
+</html>

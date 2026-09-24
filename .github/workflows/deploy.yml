@@ -19,6 +19,7 @@ jobs:
       - name: Deploy public/ to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
+          wranglerVersion: "4"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: a1d3ea71137a0bf339977f85c7cf0029
           command: deploy

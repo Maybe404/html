@@ -133,7 +133,7 @@ function box(cx,cy,w,h,o={}){
   ctx.fillStyle=o.fill||(k==='n'||k==='ghost'?'rgba(14,18,26,.92)':mix('#0B0E15',col,.09));ctx.fill();
   if(k==='ghost')ctx.setLineDash([6,6]);
   ctx.strokeStyle=o.st||(k==='n'?C.hair2:k==='ghost'?C.line:rgba(col,.85));ctx.lineWidth=1.5;ctx.stroke();ctx.setLineDash([]);
-  if(o.glow>0&&k!=='n'){ctx.save();ctx.globalAlpha*=o.glow;ctx.shadowColor=col;ctx.shadowBlur=24;ctx.strokeStyle=col;ctx.lineWidth=1.6;rr(x,y,w,h,r);ctx.stroke();ctx.restore();}
+  if(o.glow>0&&k!=='n'){ctx.save();ctx.globalAlpha*=o.glow*.3;ctx.strokeStyle=col;ctx.lineWidth=7;rr(x-2,y-2,w+4,h+4,r+2);ctx.stroke();ctx.globalAlpha/=.3;ctx.lineWidth=1.6;rr(x,y,w,h,r);ctx.stroke();ctx.restore();}
   const lc=o.lc||(k==='llm'?C.llmInk:k==='code'?C.codeInk:k==='fb'?C.sandInk:C.text);
   if(o.label)T(o.label,cx,o.ly??(o.sub?cy-4:cy+8),{f:o.lf||F.sans(24,600),c:lc,al:'center'});
   if(o.sub)T(o.sub,cx,o.sy??(cy+25),{f:o.sf||F.sans(18),c:o.sc||C.muted,al:'center'});
@@ -918,10 +918,12 @@ function progress(t){
 
 /* ---------- frame ---------- */
 let K2=1,OX=0,OY=0,PW=1,PH=1;
-const STARS=Array.from({length:260},(_,i)=>({x:rnd(i*3+1),y:rnd(i*3+2),r:.5+rnd(i*7)*1.3,d:.2+rnd(i*5)*.8,a:.15+rnd(i*11)*.5}));
+const STARS=Array.from({length:170},(_,i)=>({x:rnd(i*3+1),y:rnd(i*3+2),r:.5+rnd(i*7)*1.3,d:.2+rnd(i*5)*.8,a:.15+rnd(i*11)*.5}));
 function resize(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
-  PW=Math.max(2,Math.round(innerWidth*dpr));PH=Math.max(2,Math.round(innerHeight*dpr));
+  // cap the backing store at ~2560px on the long side; the browser upscales the rest
+  const cap=Math.min(dpr,2560/Math.max(innerWidth,innerHeight*16/9));
+  PW=Math.max(2,Math.round(innerWidth*cap));PH=Math.max(2,Math.round(innerHeight*cap));
   cv.width=PW;cv.height=PH;
   K2=Math.min(PW/W,PH/H);OX=(PW-W*K2)/2;OY=(PH-H*K2)/2;dirty=true;
 }
@@ -930,9 +932,10 @@ function frame(t){
   ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   ctx.fillStyle=C.ground;ctx.fillRect(0,0,PW,PH);
   // stars, gentle parallax
+  ctx.fillStyle='#C9D2EA';
   STARS.forEach((s,i)=>{
     const px=((s.x*PW-cam.x*.02*s.d*K2)%PW+PW)%PW,py=((s.y*PH-cam.y*.02*s.d*K2)%PH+PH)%PH;
-    ctx.globalAlpha=s.a*(.65+.35*Math.sin(t*.8+i));ctx.fillStyle='#C9D2EA';ctx.beginPath();ctx.arc(px,py,s.r*K2*1.4,0,Math.PI*2);ctx.fill();
+    const d=s.r*K2*2.2;ctx.globalAlpha=s.a*(.65+.35*Math.sin(t*.8+i));ctx.fillRect(px-d/2,py-d/2,d,d);
   });
   ctx.globalAlpha=1;
   // world transform

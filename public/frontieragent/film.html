@@ -48,6 +48,8 @@ button:focus-visible,a:focus-visible,.scrub:focus-visible{outline:2px solid var(
 .intro{display:flex;align-items:flex-end;justify-content:space-between;gap:20px 40px;flex-wrap:wrap;padding-block:34px 22px}
 .intro h1{margin:0;font-family:var(--serif);font-weight:700;font-size:clamp(24px,3.1vw,36px);line-height:1.3;letter-spacing:.01em;text-wrap:balance;max-width:22em}
 .intro p{margin:10px 0 0;color:var(--muted);font-size:15.5px;max-width:42em}
+.intro p a{color:var(--text);text-decoration-color:var(--line);text-underline-offset:3px;transition:text-decoration-color .2s}
+.intro p a:hover{text-decoration-color:var(--llm)}
 .meta{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:13px;color:var(--faint);padding-bottom:4px}
 .meta b{color:var(--muted);font-weight:500;font-family:var(--mono)}
 
@@ -155,6 +157,7 @@ footer a{color:var(--muted)}
       <span class="bn">FrontierAgent</span><span class="bs">动画短片</span>
     </a>
     <nav>
+      <a href="https://html.maybe404.com/frontieragent/journey">全流程动画 ↗</a>
       <a href="https://html.maybe404.com/frontieragent/notes">配套研读笔记 ↗</a>
       <a href="https://github.com/ApodexAI/FrontierAgent" target="_blank" rel="noopener">项目源码 ↗</a>
     </nav>
@@ -163,7 +166,7 @@ footer a{color:var(--muted)}
   <section class="intro">
     <div>
       <h1>报告为什么写得好，长任务为什么不崩</h1>
-      <p>FrontierAgent 是一个开源的 AI 智能体框架：一个“协调者”带着一群“子智能体”分工合作，写需要大量查资料、算数据的调研报告。这部短片用 11 幕讲清楚它怎样做到又准又稳。</p>
+      <p>FrontierAgent 是一个开源的 AI 智能体框架：一个“协调者”带着一群“子智能体”分工合作，写需要大量查资料、算数据的调研报告。这部短片用 11 幕讲清楚它怎样做到又准又稳；想一口气连着看完整个流程，可以看<a href="https://html.maybe404.com/frontieragent/journey">全流程动画</a>。</p>
     </div>
     <div class="meta"><span><b>11</b> 幕</span><span>约 <b id="durTxt">3:45</b></span><span>改编自 27 节源码研读</span></div>
   </section>
@@ -1098,7 +1101,7 @@ function frame(t){
   if(i!==ambScene){ambScene=i;const[gx,gy,gc]=s.g;ambEl.style.setProperty('--gx',(gx/19.2).toFixed(2)+'%');ambEl.style.setProperty('--gy',(gy/10.8).toFixed(2)+'%');ambEl.style.setProperty('--gc',H2(gc).join(','));}
   const aa=Math.round(a*50)/50;if(aa!==ambA){ambA=aa;ambEl.style.opacity=String(aa);}
   ctx.save();ctx.globalAlpha=a;
-  const z=.88*(1+.016*cl(lt/s.D));
+  const z=.88; // fixed framing: a slow push re-rasterises every glyph each frame and makes text shimmer
   ctx.translate(W/2,34);ctx.scale(z,z);ctx.translate(-W/2,-34);
   s.draw(lt/K,s.d);
   ctx.restore();

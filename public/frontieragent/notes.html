@@ -107,6 +107,9 @@ main{min-width:0}
 .film-link{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--indigo-ink);padding:8px 18px;border-radius:999px;background-color:var(--indigo-mist);background-image:none;border:1px solid var(--indigo);transition:background-color .25s,transform .25s}
 .film-link:hover{background-color:var(--indigo-soft);transform:translateX(2px)}
 .hero .film-link{margin-top:18px}
+.film-links{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center}
+.film-link.alt{background-color:transparent;border-color:var(--line)}
+.film-link.alt:hover{background-color:var(--indigo-mist)}
 .end-film{margin:22px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
 
 .qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:40px}
@@ -374,7 +377,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--faint);text-align:left}
   
 <div class="meta"><span>仓库 <b>ApodexAI/FrontierAgent</b></span><span>基于提交 <b>9e533db</b></span><span>4 个部分 · 27 节 · 27 张图</span>
 </div>
-<a class="film-link" href="https://html.maybe404.com/frontieragent/film">先看 约 4 分钟的动画短片 →</a>
+<div class="film-links"><a class="film-link" href="https://html.maybe404.com/frontieragent/film">先看 约 4 分钟的动画短片 →</a><a class="film-link alt" href="https://html.maybe404.com/frontieragent/journey">全流程动画：跟着一个问题走完十二站 →</a></div>
   
 <div class="thesis glass">
 <p>它没有让任何一个模型变得更聪明，而是让每个模型<em>做得更少</em>、做的事<em>可以被检查</em>、做错了<em>有人发现</em>、发现了<em>有退路</em>。</p>
@@ -2974,7 +2977,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--faint);text-align:left}
 <li><strong>编排模型</strong>：不给它任何获取事实的工具；派发要自动附原问题、限任务数、限权限、过资源管控；运行中有观察器提醒或强停；结束前看板必须清空，并由看不到它推理的审查者从原题重列子问题。其中“必须验证”在默认配置下只是提示词要求。</li>
 <li><strong>长链可靠性</strong>：不把每一步做到 100%，而是让失败能被发现并换条件重试、出错降级不中断、用独立的并行冗余代替串联、用闭环阻止错误传播、能交给代码的就不交给模型。代价是成本，结果也远不到 100%。</li>
 </ol>
-<p class="end-film">想换个方式再过一遍？<a class="film-link" href="https://html.maybe404.com/frontieragent/film">看 约 4 分钟的动画短片 →</a></p>
+<p class="end-film">想换个方式再过一遍？</p><div class="film-links"><a class="film-link" href="https://html.maybe404.com/frontieragent/film">看 约 4 分钟的动画短片 →</a><a class="film-link alt" href="https://html.maybe404.com/frontieragent/journey">看全流程动画 →</a></div>
 </section>
 <section class="sec" id="appendix">
   

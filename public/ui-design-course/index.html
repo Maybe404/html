@@ -3555,18 +3555,17 @@ table.spec tr:last-child td{border-bottom:0}
   addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY;skip=!!e.target.closest('input,.hot-stage')},{passive:true});
   addEventListener('touchend',e=>{if(tx===null||skip||anyOpen()){tx=null;return}const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)(dx<0?next:prev)();else if(Math.abs(dy)>60&&Math.abs(dy)>Math.abs(dx)*1.6&&atEdge(dy<0?1:-1))(dy<0?next:prev)();tx=null});
   /* ---------- 滚轮翻页：滚一下翻一页 ---------- */
-  function atEdge(dir){const s=slides[cur];if(!s||s.scrollHeight<=s.clientHeight+2)return true;return dir>0?s.scrollTop+s.clientHeight>=s.scrollHeight-2:s.scrollTop<=0}
-  let wheelLock=0,wheelAcc=0,wheelT=0;
+  function atEdge(dir){const s=slides[cur];if(!isMob()||!s||s.scrollHeight<=s.clientHeight+2)return true;return dir>0?s.scrollTop+s.clientHeight>=s.scrollHeight-2:s.scrollTop<=0}
+  let wheelLock=0,wheelT=0,wheelLast=0;
   addEventListener('wheel',e=>{
     if(anyOpen()||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;
     const dir=e.deltaY>0?1:-1;
     if(!atEdge(dir))return;
     e.preventDefault();
-    const now=Date.now();
-    if(now<wheelLock){wheelLock=now+250;return}
-    if(now-wheelT>200)wheelAcc=0; wheelT=now; wheelAcc+=Math.abs(e.deltaY);
-    if(wheelAcc<30)return;
-    wheelAcc=0; wheelLock=now+700; dir>0?next():prev();
+    const now=Date.now(),d=Math.abs(e.deltaY),gap=now-wheelT,fresh=gap>160||d>wheelLast*1.5;
+    wheelT=now;wheelLast=d;
+    if(now<wheelLock||!fresh)return;
+    wheelLock=now+450; dir>0?next():prev();
   },{passive:false});
 
   /* ---------- Canvas：散乱方块吸附到网格 ---------- */

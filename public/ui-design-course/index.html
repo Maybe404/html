@@ -235,7 +235,19 @@ table.spec tr:last-child td{border-bottom:0}
   .stage{position:static;transform:none}
   .slide{position:relative;opacity:1;visibility:visible;filter:none;transform:none;height:810px;width:1440px;page-break-after:always}
 }
-#btnNotes,#btnScript,#scriptOverlay,#drawer,.drawer{display:none!important}</style>
+#btnNotes,#btnScript,#scriptOverlay,#drawer,.drawer{display:none!important}
+/* ---------- 滚动网页模式 ---------- */
+html,body{height:auto}
+body{overflow:auto}
+.hud,.progress,.drawer,.overlay{display:none!important}
+.stage-wrap{position:static!important;inset:auto!important;height:auto!important;overflow:visible!important}
+.stage{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto;margin:0 auto}
+.slide{position:relative;inset:auto;width:1440px;height:810px;zoom:var(--s,1);margin:0 auto;opacity:1;visibility:visible;pointer-events:auto;transform:none;filter:none;transition:none;border-bottom:1px solid var(--line)}
+@media (max-width:900px){
+  .stage{width:100%}
+  .slide{width:auto;height:auto;min-height:100svh;zoom:1;overflow:visible}
+}
+</style>
 <style>
 /* ===== 开场 ===== */
 .cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -3476,7 +3488,7 @@ table.spec tr:last-child td{border-bottom:0}
     wrap.style.bottom=(hud+dh)+'px';
     if(isMob()){stage.style.removeProperty('--s');return}
     const W=innerWidth,H=innerHeight-hud-dh;
-    stage.style.setProperty('--s',Math.max(.2,Math.min((W-32)/1440,(H-24)/810)));
+    stage.style.setProperty('--s',Math.max(.2,Math.min(1,(W-32)/1440)));
   }
   addEventListener('resize',()=>{fit();sizeAll()});
   mq.addEventListener&&mq.addEventListener('change',()=>{fit();sizeAll();enter()});
@@ -3484,7 +3496,7 @@ table.spec tr:last-child td{border-bottom:0}
   /* ---------- 翻页 ---------- */
   function go(i,push){
     i=Math.max(0,Math.min(N-1,i)); if(i===cur)return;
-    slides.forEach((s,k)=>{s.style.setProperty('--from',(k>i?14:-14)+'px');s.classList.toggle('is-active',k===i);if(k!==i)s.classList.remove('play')});
+    slides.forEach((s,k)=>{s.style.setProperty('--from',(k>i?14:-14)+'px');s.classList.toggle('is-active',k===i)});
     cur=i; counter.textContent=(i+1)+' / '+N; progress.style.width=((i+1)/N*100)+'%';
     if(push!==false) history.replaceState(null,'','#'+(i+1));
     renderNotes(); $$('.toc button').forEach((b,k)=>b.classList.toggle('cur',k===i));
@@ -3542,18 +3554,18 @@ table.spec tr:last-child td{border-bottom:0}
     if(k==='Escape'){$$('.overlay').forEach(closeOverlay);return}
     if(anyOpen())return;
     if(e.target.type==='range'&&(k==='ArrowLeft'||k==='ArrowRight'||k==='ArrowUp'||k==='ArrowDown'))return;
-    if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'){e.preventDefault();next()}
-    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'){e.preventDefault();prev()}
-    else if(k==='Home')go(0); else if(k==='End')go(N-1);
     
-    else if(k==='o'||k==='O')openOverlay($('#tocOverlay'));
     
-    else if(k==='r'||k==='R')enter();
-    else if(k==='f'||k==='F')$('#btnFull').click();
+    
+    
+    
+    
+    
+    
   });
   let tx=null,ty=null,skip=false;
   addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY;skip=!!e.target.closest('input,.hot-stage')},{passive:true});
-  addEventListener('touchend',e=>{if(tx===null||skip||anyOpen()){tx=null;return}const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)(dx<0?next:prev)();tx=null});
+  addEventListener('touchend',e=>{if(tx===null||skip||anyOpen()){tx=null;return}const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)void 0;tx=null});
 
   /* ---------- Canvas：散乱方块吸附到网格 ---------- */
   const cvs=$$('canvas.cv').map(c=>({c,ctx:c.getContext('2d'),dark:c.closest('.slide').classList.contains('dark'),area:c.dataset.area,t:0,items:null,W:0,H:0}));
@@ -3610,7 +3622,7 @@ table.spec tr:last-child td{border-bottom:0}
   window.DECK.start=function(){
     Object.values(SC).forEach(sc=>{if(sc.init){try{sc.init()}catch(e){console.error(e)}}});
     buildToc();buildScript();fit();
-    const h=parseInt(location.hash.slice(1),10);go(isNaN(h)?0:h-1,false);
+    const h=parseInt(location.hash.slice(1),10);go(isNaN(h)?0:h-1,false);if(!isNaN(h)&&slides[h-1])slides[h-1].scrollIntoView();const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const k=slides.indexOf(e.target);if(k>=0&&k!==cur)go(k,false)}})},{rootMargin:'-50% 0px -50% 0px',threshold:0});slides.forEach(x=>io.observe(x));
     addEventListener('hashchange',()=>{const k=parseInt(location.hash.slice(1),10);if(!isNaN(k))go(k-1,false)});
     
     setTimeout(()=>{fit();sizeAll()},120);

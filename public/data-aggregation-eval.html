@@ -74,7 +74,11 @@ p{margin:0 0 10px}
 .findings b{color:var(--ink);font-weight:600;display:block;margin-bottom:2px}
 .mini{margin:20px 0 0;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-lg);padding:20px 22px}
 .mini figcaption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px} .mini figcaption b{color:var(--ink);font-weight:600} .mini figcaption span{font-size:12px;color:var(--faint)}
-.mini svg{min-width:560px}
+.mini svg{min-width:600px}
+.zone{fill:var(--coral-soft)} .cut{stroke:var(--coral);stroke-width:1.5;stroke-dasharray:4 4} .zt{font:500 13px var(--sans);fill:var(--coral-ink)}
+.rail{stroke:var(--hair);stroke-width:2} .rl{font:13px var(--sans);fill:var(--muted)} .rl-s{fill:var(--ink)}
+.pd{stroke:var(--paper);stroke-width:2} .pd-s{fill:var(--coral)} .pd-n{fill:#9a968d} .pd-x{stroke:var(--ink);stroke-width:2.5}
+.pl{font:13px var(--sans);fill:var(--body)} .plx{fill:var(--ink);font-weight:600}
 .cost{margin-top:20px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-lg);padding:20px 22px}
 .cost-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px} .cost-h b{color:var(--ink);font-weight:600} .cost-h span{font-size:13px;color:var(--faint)}
 .cost-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
@@ -385,14 +389,20 @@ footer{border-top:1px solid var(--hair);padding-top:20px;font-size:13px;color:va
     <li><span class="n">6</span><div><b>Jev 要一次判一对，不要让它从几十个选项里挑。</b>让它多选一时，准确度明显下降。</div></li>
   </ol>
   <figure class="mini">
-    <figcaption><b>为什么只看“像不像”不行</b><span>柱子越高，落在这个相似度的文章对越多</span></figcaption>
-    <div class="scroll"><svg viewBox="0 0 720 130" role="img" aria-label="同一件事与无关文章对的相似度分布，两者大面积重叠">
-<line x1="152.8888888888889" x2="152.8888888888889" y1="20" y2="100" class="grid"/><text x="152.8888888888889" y="118" text-anchor="middle" class="ax">20%</text><line x1="290.6666666666667" x2="290.6666666666667" y1="20" y2="100" class="grid"/><text x="290.6666666666667" y="118" text-anchor="middle" class="ax">40%</text><line x1="428.44444444444446" x2="428.44444444444446" y1="20" y2="100" class="grid"/><text x="428.44444444444446" y="118" text-anchor="middle" class="ax">60%</text><line x1="566.2222222222222" x2="566.2222222222222" y1="20" y2="100" class="grid"/><text x="566.2222222222222" y="118" text-anchor="middle" class="ax">80%</text><line x1="704" x2="704" y1="20" y2="100" class="grid"/><text x="704" y="118" text-anchor="middle" class="ax">100%</text>
-<text x="74" y="46" text-anchor="end" class="lab">同一件事</text><path d="M290.7 52h6.1v-13.0h-6.1zM400.9 52h6.1v-18.4h-6.1zM428.4 52h6.1v-13.0h-6.1zM435.3 52h6.1v-13.0h-6.1zM469.8 52h6.1v-13.0h-6.1zM476.7 52h6.1v-26.0h-6.1zM504.2 52h6.1v-13.0h-6.1zM511.1 52h6.1v-22.5h-6.1zM531.8 52h6.1v-22.5h-6.1zM538.7 52h6.1v-13.0h-6.1zM545.6 52h6.1v-22.5h-6.1zM559.3 52h6.1v-13.0h-6.1zM566.2 52h6.1v-13.0h-6.1zM580.0 52h6.1v-13.0h-6.1zM600.7 52h6.1v-13.0h-6.1zM607.6 52h6.1v-13.0h-6.1zM614.4 52h6.1v-13.0h-6.1zM635.1 52h6.1v-18.4h-6.1zM648.9 52h6.1v-13.0h-6.1zM676.4 52h6.1v-13.0h-6.1z" class="hb k0"/><text x="74" y="92" text-anchor="end" class="lab">无关</text><path d="M146.0 98h6.1v-3.4h-6.1zM152.9 98h6.1v-2.4h-6.1zM159.8 98h6.1v-7.5h-6.1zM166.7 98h6.1v-7.2h-6.1zM173.6 98h6.1v-6.3h-6.1zM180.4 98h6.1v-10.1h-6.1zM187.3 98h6.1v-10.1h-6.1zM194.2 98h6.1v-12.6h-6.1zM201.1 98h6.1v-13.7h-6.1zM208.0 98h6.1v-14.9h-6.1zM214.9 98h6.1v-17.5h-6.1zM221.8 98h6.1v-16.7h-6.1zM228.7 98h6.1v-18.5h-6.1zM235.6 98h6.1v-21.6h-6.1zM242.4 98h6.1v-25.2h-6.1zM249.3 98h6.1v-26.0h-6.1zM256.2 98h6.1v-24.1h-6.1zM263.1 98h6.1v-23.8h-6.1zM270.0 98h6.1v-24.1h-6.1zM276.9 98h6.1v-23.1h-6.1zM283.8 98h6.1v-21.2h-6.1zM290.7 98h6.1v-19.2h-6.1zM297.6 98h6.1v-20.4h-6.1zM304.4 98h6.1v-17.7h-6.1zM311.3 98h6.1v-16.3h-6.1zM318.2 98h6.1v-18.0h-6.1zM325.1 98h6.1v-12.6h-6.1zM332.0 98h6.1v-12.2h-6.1zM338.9 98h6.1v-10.7h-6.1zM345.8 98h6.1v-11.4h-6.1zM352.7 98h6.1v-9.8h-6.1zM359.6 98h6.1v-10.1h-6.1zM366.4 98h6.1v-8.9h-6.1zM373.3 98h6.1v-10.1h-6.1zM380.2 98h6.1v-5.3h-6.1zM387.1 98h6.1v-3.4h-6.1zM394.0 98h6.1v-4.1h-6.1zM400.9 98h6.1v-3.4h-6.1zM407.8 98h6.1v-6.3h-6.1zM414.7 98h6.1v-8.3h-6.1zM421.6 98h6.1v-5.3h-6.1zM428.4 98h6.1v-4.1h-6.1zM435.3 98h6.1v-4.8h-6.1zM442.2 98h6.1v-4.1h-6.1zM449.1 98h6.1v-3.4h-6.1zM456.0 98h6.1v-6.7h-6.1zM462.9 98h6.1v-4.1h-6.1zM469.8 98h6.1v-4.1h-6.1zM476.7 98h6.1v-2.4h-6.1zM483.6 98h6.1v-4.8h-6.1zM490.4 98h6.1v-3.4h-6.1zM497.3 98h6.1v-4.1h-6.1zM504.2 98h6.1v-2.4h-6.1zM511.1 98h6.1v-3.4h-6.1zM518.0 98h6.1v-2.4h-6.1zM524.9 98h6.1v-4.1h-6.1zM531.8 98h6.1v-3.4h-6.1zM538.7 98h6.1v-2.4h-6.1zM545.6 98h6.1v-2.4h-6.1zM552.4 98h6.1v-2.4h-6.1zM586.9 98h6.1v-2.4h-6.1zM628.2 98h6.1v-3.4h-6.1zM642.0 98h6.1v-2.4h-6.1zM662.7 98h6.1v-2.4h-6.1zM690.2 98h6.1v-2.4h-6.1z" class="hb k2"/>
-<text x="695.7333333333333" y="64" text-anchor="end" class="ann">两次不同年份的故障 99% ↓</text>
-<text x="400.8888888888889" y="14" class="ann">↓ 写法不同的同一件事 56%</text>
+    <figcaption><b>为什么只看“像不像”不行</b><span>向量会给两篇文章打一个“相似度”，0–100%</span></figcaption>
+    <div class="scroll"><svg viewBox="0 0 720 214" role="img" aria-label="6 对真实文章的相似度：设 70% 为门槛时，两对不同的事被错误合并，一对同一件事被漏掉">
+<rect x="495.99999999999994" y="22" width="204.00000000000006" height="160" class="zone"/>
+<text x="503.99999999999994" y="16" class="zt">假如规定：相似度 ≥ 70% 就合并 →</text>
+<line x1="495.99999999999994" x2="495.99999999999994" y1="22" y2="182" class="cut"/>
+<text x="20" y="36" class="rl rl-s">应该合并（同一件事）</text>
+<line x1="20" x2="700" y1="70" y2="70" class="rail"/>
+<text x="20" y="116" class="rl">不该合并（不同的事）</text>
+<line x1="20" x2="700" y1="150" y2="150" class="rail"/>
+<circle cx="677.4" cy="70" r="7" class="pd pd-s"/><text x="677.4" y="54" text-anchor="end" class="pl">转载 97%</text><circle cx="513.9" cy="70" r="7" class="pd pd-s"/><text x="513.9" y="54" text-anchor="middle" class="pl">个人博客 73%</text><circle cx="401.2" cy="70" r="7" class="pd pd-s pd-x"/><text x="401.2" y="54" text-anchor="middle" class="pl plx">不提公司名的报道 56% · 漏掉</text>
+<circle cx="691.5" cy="150" r="7" class="pd pd-n pd-x"/><text x="691.5" y="134" text-anchor="end" class="pl plx">两年的两次故障 99% · 错并</text><circle cx="659.8" cy="150" r="7" class="pd pd-n pd-x"/><text x="659.8" y="176" text-anchor="end" class="pl plx">星衡-2 和星衡-3 94% · 错并</text><circle cx="422.8" cy="150" r="7" class="pd pd-n"/><text x="422.8" y="134" text-anchor="middle" class="pl">同公司同一天的另一件事 59%</text>
+<text x="20" y="204" text-anchor="start" class="ax">0%</text><text x="156" y="204" text-anchor="middle" class="ax">20%</text><text x="292" y="204" text-anchor="middle" class="ax">40%</text><text x="428" y="204" text-anchor="middle" class="ax">60%</text><text x="564" y="204" text-anchor="middle" class="ax">80%</text><text x="700" y="204" text-anchor="end" class="ax">100%</text>
 </svg></div>
-    <p class="note">真正的同一件事（上），和完全无关的两件事（下），相似度大面积重叠：两次不同年份的故障报道相似度高达 99%，而一篇不提公司名的报道和原文只有 56%。所以必须有模型来判断。</p>
+    <p class="note">图里是 6 对真实测试文章。按 70% 划线：两次不同年份的故障（99%）、星衡-2 和星衡-3（94%）被错误合并，而一篇不提公司名的报道（56%）被漏掉。门槛往哪挪都会出错，60 篇文章两两组合的 1,770 对里同样如此（完整分布见“详细结果”），所以必须让模型来判断。</p>
   </figure>
   <div class="cost">
     <div class="cost-h"><b>成本：每天 1 万条内容，各要花多少</b><span>按本次实测的单价推算</span></div>

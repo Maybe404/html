@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN" data-mode="life">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>maybe — 也许找不到，也没关系</title>
+    <meta name="description" content="maybe / maybe404 的个人网站：独立开发者，写代码，也做设计。也许找不到，也没关系。" />
+    <meta name="theme-color" content="#f4f2ed" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23171614'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' text-anchor='middle' fill='%23f4f2ed'%3Em_%3C/text%3E%3C/svg%3E" />
+    <script>
+      // 首帧前恢复模式，避免闪烁
+      try {
+        var q = new URLSearchParams(location.search).get('mode');
+        var m = q === 'pro' || q === 'life' ? q : localStorage.getItem('maybe-mode');
+        if (m === 'pro' || m === 'life') document.documentElement.dataset.mode = m;
+        if (sessionStorage.getItem('maybe-seen')) document.documentElement.classList.add('seen');
+      } catch (e) {}
+      document.documentElement.classList.add('js');
+    </script>
+    <script type="module" crossorigin src="/claude-versions/assets/main-S3sxYw2O.js"></script>
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scramble-GtI9-QmC.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/engine-EGzP4374.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/image-fi06kI0a.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/content-CBJzVLUT.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/cursor-DxAx9OWq.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/lenis-9qxpAu3p.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scenes-Dnl_Gz_b.js">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/scramble-BLu1YgAK.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/image-D1apCr_r.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/cursor-rzDDVL0i.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/800-CtUZLrJw.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/400-italic-CNZuW91Z.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到正文</a>
+
+    <!-- 加载：000 → 404 -->
+    <div class="loader" aria-hidden="true">
+      <div class="loader__count"><span class="loader__num">000</span><span class="loader__pct">%</span></div>
+      <div class="loader__status">正在寻找 maybe…</div>
+      <div class="loader__bar"><span></span></div>
+    </div>
+
+    <!-- 常驻的字符物体 -->
+    <div class="stage" aria-hidden="true">
+      <canvas class="stage__canvas"></canvas>
+      <div class="stage__hit" data-cursor="拖动"></div>
+    </div>
+
+    <header class="nav">
+      <a class="nav__brand" href="#top" aria-label="回到顶部">
+        <span class="nav__brand-text" data-brand>maybe</span><span class="nav__caret"></span>
+      </a>
+      <nav class="nav__links" aria-label="站内导航"></nav>
+      <div class="nav__right">
+        <span class="nav__pct" aria-hidden="true">000%</span>
+        <div class="toggle" role="radiogroup" aria-label="切换模式">
+          <span class="toggle__knob"></span>
+          <button class="toggle__btn" role="radio" data-set-mode="life">个人</button>
+          <button class="toggle__btn" role="radio" data-set-mode="pro">专业</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main"></main>
+
+    <div class="sheet" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="sheet__scroll" data-lenis-prevent></div>
+    </div>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+
+  </body>
+</html>

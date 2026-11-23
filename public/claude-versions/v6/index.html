@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN" data-mode="life" data-station="hub">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>maybe</title>
+    <meta name="description" content="maybe 的个人网站：一枚硬币，四样东西绕着它转。一面是生活，一面是做事。" />
+    <meta name="theme-color" content="#f4f2ed" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23171614'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' text-anchor='middle' fill='%23f4f2ed'%3E%3C%3E%3C/text%3E%3C/svg%3E" />
+    <script>
+      // 首帧前恢复是哪一面，避免闪烁
+      try {
+        var ids = { photos: 'life', diary: 'life', shelf: 'life', hello: 'life', works: 'pro', notes: 'pro', inspo: 'pro', about: 'pro' };
+        var h = location.hash.replace(/^#/, '').split('/')[0];
+        var q = new URLSearchParams(location.search).get('mode');
+        var m = ids[h] || (q === 'pro' || q === 'life' ? q : localStorage.getItem('maybe-v6-mode'));
+        if (m === 'pro' || m === 'life') document.documentElement.dataset.mode = m;
+        if (m === 'pro') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0e10');
+      } catch (e) {}
+    </script>
+    <script type="module" crossorigin src="/claude-versions/assets/v6-BrgqHiMI.js"></script>
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scramble-GtI9-QmC.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/engine-EGzP4374.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/image-fi06kI0a.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scenes-Dnl_Gz_b.js">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/scramble-BLu1YgAK.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/image-D1apCr_r.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/v6-DWQftSaO.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/800-CtUZLrJw.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/400-italic-CNZuW91Z.css">
+  </head>
+  <body>
+    <canvas class="field" aria-hidden="true"></canvas>
+    <canvas class="scene" aria-hidden="true"></canvas>
+    <canvas class="scene scene--mini" aria-hidden="true"></canvas>
+
+    <header class="top">
+      <a class="brand" href="./" data-brand aria-label="回到中间"><span data-brand-name>maybe</span><span class="brand__caret"></span></a>
+      <button class="side" type="button" data-side data-cur="flip">
+        <span class="side__o" data-o="life"></span>
+        <span class="side__track" aria-hidden="true"><span class="side__dot"></span></span>
+        <span class="side__o" data-o="pro"></span>
+      </button>
+    </header>
+
+    <section class="hub" aria-label="首页">
+      <p class="hub__line"></p>
+    </section>
+
+    <main class="stage" id="main"></main>
+
+    <nav class="orbs" aria-label="四个房间">
+      <button class="orb" type="button" data-cur="enter"><span class="orb__t"></span></button>
+      <button class="orb" type="button" data-cur="enter"><span class="orb__t"></span></button>
+      <button class="orb" type="button" data-cur="enter"><span class="orb__t"></span></button>
+      <button class="orb" type="button" data-cur="enter"><span class="orb__t"></span></button>
+    </nav>
+    <div class="coin-hit" role="button" tabindex="0" data-cur="flip"></div>
+
+    <p class="here" aria-live="polite"><span class="here__now"></span><span class="here__next"></span></p>
+
+    <div class="reader" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="reader__scroll"></div>
+    </div>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+
+  </body>
+</html>

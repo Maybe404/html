@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN" data-mode="life" data-station="hub">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>maybe</title>
+    <meta name="description" content="maybe 的个人网站：智能体工程师、agent 产品经理、个人开发者。一面是生活，一面是做事。" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- 网站图标：用这个网站自己的字符引擎画的那枚 404 硬币（深底，右上角一点蓝光） -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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" />
+    <script>
+      // 首帧前恢复是哪一面，避免闪烁
+      try {
+        var ids = { photos: 'life', diary: 'life', shelf: 'life', about: 'life', works: 'pro', writing: 'pro', lab: 'pro', cv: 'pro' };
+        var h = location.hash.replace(/^#/, '').split('/')[0];
+        var q = new URLSearchParams(location.search).get('mode');
+        var m = ids[h] || (q === 'pro' || q === 'life' ? q : localStorage.getItem('maybe-v616-mode'));
+        if (m === 'pro' || m === 'life') document.documentElement.dataset.mode = m;
+        if (m === 'pro') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0e10');
+      } catch (e) {}
+    </script>
+    <script type="module" crossorigin src="/claude-versions/assets/v616-BDTFFovV.js"></script>
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/shapes-ng85rB9S.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scramble-2VBqvvrG.js">
+    <link rel="modulepreload" crossorigin href="/claude-versions/assets/scenes-Dnl_Gz_b.js">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/shapes-BLu1YgAK.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/v616-B4jqwJkU.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/800-CtUZLrJw.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/400-italic-CNZuW91Z.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/lxgwwenkai-bold-D1apCr_r.css">
+    <link rel="stylesheet" crossorigin href="/claude-versions/assets/400-h1Fjfa6B.css">
+  </head>
+  <body>
+    <canvas class="field" aria-hidden="true"></canvas>
+    <canvas class="scene" aria-hidden="true"></canvas>
+
+    <!--
+      左上角：一个罗盘。中间是 v3 里那个字符球（点它回首页），四个房间在四个方向上。
+    -->
+    <!-- 左上角：一团会转的点组成的球，蓝色的眼睛跟着指针，点它回首页 -->
+    <nav class="compass" aria-label="回到首页">
+      <canvas aria-hidden="true"></canvas>
+      <button class="core" type="button" data-brand data-cur="enter" aria-label="回到首页：关于"></button>
+    </nav>
+
+    <!-- 右上角：Personal / Professional，亮着的那个词是现在这一面（v6.16 去掉了中间的小硬币） -->
+    <header class="top">
+      <div class="switch" role="group" aria-label="切换生活 / 工作">
+        <button class="switch__w" type="button" data-to="life" data-cur="flip">Personal</button>
+        <span class="switch__sep" data-side aria-hidden="true">/</span>
+        <button class="switch__w" type="button" data-to="pro" data-cur="flip">Professional</button>
+      </div>
+    </header>
+
+    <main class="stage" id="main"></main>
+
+    <!-- 往下一个房间拉的时候，底下浮出「↓ 日常」 -->
+    <p class="pullhint" aria-hidden="true"></p>
+    <!-- 你在哪：屏幕底下中间一行「生活 · 相册」。翻面以后变蓝、前面一个 →，提醒你换了地方 -->
+    <p class="where" aria-live="polite"></p>
+
+    <div class="coin-hit" role="button" tabindex="0" data-cur="flip"></div>
+
+
+    <div class="reader" role="dialog" aria-modal="true" aria-hidden="true">
+      <!-- 返回上一级：在左上角，紧挨着回首页的那个球 -->
+      <button class="reader__back" type="button" data-cur="enter"><span class="reader__arr">←</span><span class="reader__to"></span><kbd>esc</kbd></button>
+      <div class="reader__scroll"></div>
+    </div>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+
+  </body>
+</html>
